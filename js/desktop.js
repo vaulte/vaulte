@@ -1879,9 +1879,7 @@ function openTextDocument(file) {
         document.createElement("div");
 
 
-    windowElement.id =
-        id;
-
+    windowElement.id = id;
 
     windowElement.className =
         "os-window";
@@ -1890,18 +1888,14 @@ function openTextDocument(file) {
     windowElement.style.width =
         "520px";
 
-
     windowElement.style.height =
         "400px";
-
 
     windowElement.style.left =
         "200px";
 
-
     windowElement.style.top =
         "100px";
-
 
     windowElement.style.zIndex =
         ++highestZ;
@@ -1918,16 +1912,19 @@ function openTextDocument(file) {
             <div class="window-buttons">
 
                 <button
+                    type="button"
                     onclick="minimizeWindow('${id}')">
                     _
                 </button>
 
                 <button
+                    type="button"
                     onclick="maximizeWindow('${id}')">
                     □
                 </button>
 
                 <button
+                    type="button"
                     onclick="closeWindow('${id}')">
                     ×
                 </button>
@@ -1939,23 +1936,61 @@ function openTextDocument(file) {
 
         <div class="document-viewer">
 
-            <pre>${file.content}</pre>
+            <pre></pre>
 
         </div>
 
     `;
 
 
-    document
-        .getElementById("desktop")
-        .appendChild(
-            windowElement
+    /*
+        Add the window to the desktop
+        BEFORE putting text into it.
+    */
+
+    const desktop =
+        document.getElementById("desktop");
+
+
+    desktop.appendChild(
+        windowElement
+    );
+
+
+    /*
+        Safely insert the document
+        contents.
+    */
+
+    const documentText =
+        windowElement.querySelector(
+            ".document-viewer pre"
         );
 
+
+    documentText.textContent =
+        file.content;
+
+
+    /*
+        Tell the OS that this window
+        is currently open.
+    */
 
     openWindows[id] =
         true;
 
+
+    /*
+        Bring it to the front.
+    */
+
+    bringToFront(id);
+
+
+    /*
+        Update the taskbar.
+    */
 
     updateTaskbar();
 
