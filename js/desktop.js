@@ -1194,3 +1194,769 @@ setInterval(
     updateClock,
     1000
 );
+
+
+
+
+
+/* =========================================
+   FAKE FILE SYSTEM
+========================================= */
+
+const fileSystem = {
+
+    "My Documents": {
+
+        type: "folder",
+
+        children: {
+
+            "Thesis": {
+
+                type: "folder",
+
+                children: {
+
+                    "Field Notes": {
+
+                        type: "folder",
+
+                        children: {
+
+                            "FIELD_NOTE_001.txt": {
+                                type: "file",
+                                fileType: "text",
+                                title: "Field Note 001",
+                                content:
+`LLYN UNIVERSITY
+MARINE SCIENCE DIVISION
+
+FIELD NOTE 001
+
+Date: 14/03/2004
+
+Initial observations recorded.
+
+Further documentation has been
+placed in the research directory.`
+                            },
+
+                            "FIELD_NOTE_002.txt": {
+                                type: "file",
+                                fileType: "text",
+                                title: "Field Note 002",
+                                content:
+`LLYN UNIVERSITY
+MARINE SCIENCE DIVISION
+
+FIELD NOTE 002
+
+The water samples continue to
+produce inconsistent results.
+
+Supervisor has requested that
+additional samples be collected.`
+                            }
+
+                        }
+
+                    },
+
+
+                    "Research": {
+
+                        type: "folder",
+
+                        children: {
+
+                            "research_database.url": {
+                                type: "file",
+                                fileType: "website",
+                                title: "Research Database",
+                                url: "research.html"
+                            },
+
+                            "bibliography.txt": {
+                                type: "file",
+                                fileType: "text",
+                                title: "Bibliography",
+                                content:
+`THESIS BIBLIOGRAPHY
+
+Selected references:
+
+1. Wetland Ecology and
+   Environmental Systems
+
+2. Iron Oxidation in
+   Freshwater Ecosystems
+
+3. Aquatic Microbiology
+
+4. Temperate Wetland Studies`
+                            }
+
+                        }
+
+                    },
+
+
+                    "Drafts": {
+
+                        type: "folder",
+
+                        children: {
+
+                            "THESIS_DRAFT_01.txt": {
+                                type: "file",
+                                fileType: "text",
+                                title: "Thesis Draft 01",
+                                content:
+`Adaptation to high iron environments in the <i>Conger conger</i>
+
+THESIS DRAFT
+
+Chapter One
+
+Introduction
+
+[DOCUMENT INCOMPLETE]`
+                            },
+
+                            "THESIS_DRAFT_02.txt": {
+                                type: "file",
+                                fileType: "text",
+                                title: "Thesis Draft 02",
+                                content:
+`Adaptation to high iron environments in the <i>Conger conger</i>
+
+THESIS DRAFT
+
+Chapter Two
+
+Environmental Conditions
+
+[DOCUMENT INCOMPLETE]`
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+
+            "Photos": {
+
+                type: "folder",
+
+                children: {
+
+                    "IMG_001.jpg": {
+                        type: "file",
+                        fileType: "image",
+                        title: "IMG_001"
+                    },
+
+                    "IMG_002.jpg": {
+                        type: "file",
+                        fileType: "image",
+                        title: "IMG_002"
+                    }
+
+                }
+
+            },
+
+
+            "Downloads": {
+
+                type: "folder",
+
+                children: {
+
+                    "University_Repository.url": {
+                        type: "file",
+                        fileType: "website",
+                        title: "University Repository",
+                        url: "repository.html"
+                    },
+
+                    "HopCorp.url": {
+                        type: "file",
+                        fileType: "website",
+                        title: "Hopkins Corporation",
+                        url: "hopcorp.html"
+                    }
+
+                }
+
+            },
+
+
+            "Read Me.txt": {
+
+                type: "file",
+
+                fileType: "text",
+
+                title: "Read Me",
+
+                content:
+`WELCOME
+
+This computer belongs to:
+
+Margarete Wake
+
+Please remember to save
+your work regularly.
+
+- Information Technology`
+            }
+
+        }
+
+    }
+
+};
+
+
+/* =========================================
+   CURRENT FOLDER
+========================================= */
+
+let currentFolder =
+    fileSystem["My Documents"];
+
+
+/* =========================================
+   OPEN FILE EXPLORER
+========================================= */
+
+function openFileExplorer() {
+
+    let existing =
+        document.getElementById(
+            "file-explorer"
+        );
+
+
+    if (existing) {
+
+        existing.style.display =
+            "block";
+
+        bringToFront(
+            "file-explorer"
+        );
+
+        return;
+
+    }
+
+
+    createFileExplorer();
+
+}
+
+
+/* =========================================
+   CREATE FILE EXPLORER
+========================================= */
+
+function createFileExplorer() {
+
+    const windowElement =
+        document.createElement("div");
+
+
+    windowElement.id =
+        "file-explorer";
+
+
+    windowElement.className =
+        "os-window file-explorer";
+
+
+    windowElement.style.width =
+        "620px";
+
+
+    windowElement.style.height =
+        "420px";
+
+
+    windowElement.style.left =
+        "120px";
+
+
+    windowElement.style.top =
+        "80px";
+
+
+    windowElement.style.zIndex =
+        ++highestZ;
+
+
+    windowElement.innerHTML = `
+
+        <div class="window-titlebar">
+
+            <span>
+                📁 My Documents
+            </span>
+
+            <div class="window-buttons">
+
+                <button
+                    onclick="minimizeWindow('file-explorer')">
+                    _
+                </button>
+
+                <button
+                    onclick="maximizeWindow('file-explorer')">
+                    □
+                </button>
+
+                <button
+                    onclick="closeWindow('file-explorer')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="explorer-toolbar">
+
+            <button onclick="goBackFolder()">
+                ← Back
+            </button>
+
+            <button onclick="goUpFolder()">
+                ↑ Up
+            </button>
+
+            <span id="folder-path">
+                My Documents
+            </span>
+
+        </div>
+
+
+        <div
+            id="explorer-content"
+            class="explorer-content">
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("desktop")
+        .appendChild(windowElement);
+
+
+    openWindows["file-explorer"] =
+        true;
+
+
+    renderFolder(
+        currentFolder
+    );
+
+
+    updateTaskbar();
+
+}
+
+
+/* =========================================
+   FOLDER HISTORY
+========================================= */
+
+let folderHistory = [];
+
+
+/* =========================================
+   OPEN FOLDER
+========================================= */
+
+function openFolder(
+    folder,
+    folderName
+) {
+
+    folderHistory.push(
+        currentFolder
+    );
+
+
+    currentFolder =
+        folder;
+
+
+    document.getElementById(
+        "folder-path"
+    ).textContent =
+        folderName;
+
+
+    renderFolder(
+        currentFolder
+    );
+
+}
+
+
+/* =========================================
+   RENDER FOLDER
+========================================= */
+
+function renderFolder(folder) {
+
+    const content =
+        document.getElementById(
+            "explorer-content"
+        );
+
+
+    if (!content) {
+        return;
+    }
+
+
+    content.innerHTML = "";
+
+
+    Object.keys(
+        folder.children
+    ).forEach(
+        function(name) {
+
+            const item =
+                folder.children[name];
+
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "file-item";
+
+
+            /*
+                Folder icon
+            */
+
+            if (
+                item.type === "folder"
+            ) {
+
+                element.innerHTML =
+                    `<div class="file-icon">
+                        📁
+                    </div>
+                    <div class="file-name">
+                        ${name}
+                    </div>`;
+
+            }
+
+
+            /*
+                Text file
+            */
+
+            else if (
+                item.fileType === "text"
+            ) {
+
+                element.innerHTML =
+                    `<div class="file-icon">
+                        📄
+                    </div>
+                    <div class="file-name">
+                        ${name}
+                    </div>`;
+
+            }
+
+
+            /*
+                Image
+            */
+
+            else if (
+                item.fileType === "image"
+            ) {
+
+                element.innerHTML =
+                    `<div class="file-icon">
+                        🖼️
+                    </div>
+                    <div class="file-name">
+                        ${name}
+                    </div>`;
+
+            }
+
+
+            /*
+                Website shortcut
+            */
+
+            else if (
+                item.fileType === "website"
+            ) {
+
+                element.innerHTML =
+                    `<div class="file-icon">
+                        🌐
+                    </div>
+                    <div class="file-name">
+                        ${name}
+                    </div>`;
+
+            }
+
+
+            /*
+                Double-click behaviour
+            */
+
+            element.ondblclick =
+                function() {
+
+                    if (
+                        item.type === "folder"
+                    ) {
+
+                        openFolder(
+                            item,
+                            name
+                        );
+
+                    }
+
+                    else {
+
+                        openFile(
+                            item
+                        );
+
+                    }
+
+                };
+
+
+            content.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   GO BACK
+========================================= */
+
+function goBackFolder() {
+
+    if (
+        folderHistory.length === 0
+    ) {
+        return;
+    }
+
+
+    currentFolder =
+        folderHistory.pop();
+
+
+    renderFolder(
+        currentFolder
+    );
+
+
+    document.getElementById(
+        "folder-path"
+    ).textContent =
+        "My Documents";
+
+}
+
+
+/* =========================================
+   GO UP
+========================================= */
+
+function goUpFolder() {
+
+    goBackFolder();
+
+}
+
+
+/* =========================================
+   OPEN FILE
+========================================= */
+
+function openFile(file) {
+
+    /*
+        TEXT DOCUMENT
+    */
+
+    if (
+        file.fileType === "text"
+    ) {
+
+        openTextDocument(
+            file
+        );
+
+    }
+
+
+    /*
+        WEBSITE
+    */
+
+    else if (
+        file.fileType === "website"
+    ) {
+
+        window.open(
+            file.url,
+            "_blank"
+        );
+
+    }
+
+
+    /*
+        IMAGE
+    */
+
+    else if (
+        file.fileType === "image"
+    ) {
+
+        alert(
+            "Image viewer coming soon."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   TEXT DOCUMENT VIEWER
+========================================= */
+
+function openTextDocument(file) {
+
+    const id =
+        "document-" +
+        Math.random()
+            .toString(36)
+            .substring(2, 9);
+
+
+    const windowElement =
+        document.createElement("div");
+
+
+    windowElement.id =
+        id;
+
+
+    windowElement.className =
+        "os-window";
+
+
+    windowElement.style.width =
+        "520px";
+
+
+    windowElement.style.height =
+        "400px";
+
+
+    windowElement.style.left =
+        "200px";
+
+
+    windowElement.style.top =
+        "100px";
+
+
+    windowElement.style.zIndex =
+        ++highestZ;
+
+
+    windowElement.innerHTML = `
+
+        <div class="window-titlebar">
+
+            <span>
+                📄 ${file.title}
+            </span>
+
+            <div class="window-buttons">
+
+                <button
+                    onclick="minimizeWindow('${id}')">
+                    _
+                </button>
+
+                <button
+                    onclick="maximizeWindow('${id}')">
+                    □
+                </button>
+
+                <button
+                    onclick="closeWindow('${id}')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="document-viewer">
+
+            <pre>${file.content}</pre>
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("desktop")
+        .appendChild(
+            windowElement
+        );
+
+
+    openWindows[id] =
+        true;
+
+
+    updateTaskbar();
+
+}
