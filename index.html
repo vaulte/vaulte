@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>STANASTASIA UNIVERSITY COMPUTER</title>
+
+    <link
+        rel="stylesheet"
+        href="desktop.css">
+
+</head>
+
+
+<body>
+
+<div id="desktop">
+
+
+    <!-- =========================================
+         DESKTOP ICONS
+    ========================================== -->
+
+    <div class="desktop-icons">
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('computerWindow')">
+
+            <div class="icon-image">💻</div>
+
+            <div class="icon-label">
+                My Computer
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('documentsWindow')">
+
+            <div class="icon-image">📁</div>
+
+            <div class="icon-label">
+                My Documents
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('thesisWindow')">
+
+            <div class="icon-image">📚</div>
+
+            <div class="icon-label">
+                Thesis
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('browserWindow')">
+
+            <div class="icon-image">🌐</div>
+
+            <div class="icon-label">
+                Internet Explorer
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('emailWindow')">
+
+            <div class="icon-image">✉️</div>
+
+            <div class="icon-label">
+                Student Email
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('newspaperWindow')">
+
+            <div class="icon-image">📰</div>
+
+            <div class="icon-label">
+                Newspaper Archive
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('researchWindow')">
+
+            <div class="icon-image">🔬</div>
+
+            <div class="icon-label">
+                Research Database
+            </div>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            ondblclick="openWindow('recycleWindow')">
+
+            <div class="icon-image">🗑️</div>
+
+            <div class="icon-label">
+                Recycle Bin
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         APPLICATION WINDOWS
+    ========================================== -->
+
+
+    <!-- MY COMPUTER -->
+
+    <div
+        id="computerWindow"
+        class="os-window"
+        style="top:100px; left:250px; width:600px; height:400px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                💻 My Computer
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('computerWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('computerWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('computerWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-toolbar">
+
+            File &nbsp;&nbsp;
+            Edit &nbsp;&nbsp;
+            View &nbsp;&nbsp;
+            Help
+
+        </div>
+
+
+        <div class="window-content computer-content">
+
+            <h3>
+                My Computer
+            </h3>
+
+
+            <div class="folder-grid">
+
+                <div class="folder">
+                    💾
+                    <span>3½ Floppy (A:)</span>
+                </div>
+
+                <div class="folder">
+                    💿
+                    <span>Local Disk (C:)</span>
+                </div>
+
+                <div class="folder">
+                    💿
+                    <span>CD Drive (D:)</span>
+                </div>
+
+                <div class="folder">
+                    🌐
+                    <span>Control Panel</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MY DOCUMENTS -->
+
+    <div
+        id="documentsWindow"
+        class="os-window"
+        style="top:130px; left:300px; width:650px; height:430px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                📁 My Documents
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('documentsWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('documentsWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('documentsWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-toolbar">
+
+            File &nbsp;&nbsp;
+            Edit &nbsp;&nbsp;
+            View &nbsp;&nbsp;
+            Favorites &nbsp;&nbsp;
+            Tools &nbsp;&nbsp;
+            Help
+
+        </div>
+
+
+        <div class="window-address">
+
+            Address:
+            <input
+                type="text"
+                value="C:\Documents and Settings\Student\My Documents"
+                readonly>
+
+        </div>
+
+
+        <div class="window-content">
+
+            <div class="file-list">
+
+                <div class="file">
+                    📁
+                    Thesis
+                </div>
+
+                <div class="file">
+                    📁
+                    Photos
+                </div>
+
+                <div class="file">
+                    📁
+                    Field Notes
+                </div>
+
+                <div class="file">
+                    📁
+                    Downloads
+                </div>
+
+                <div class="file">
+                    📄
+                    research_notes.doc
+                </div>
+
+                <div class="file">
+                    📄
+                    contacts.doc
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- THESIS -->
+
+    <div
+        id="thesisWindow"
+        class="os-window"
+        style="top:160px; left:350px; width:700px; height:500px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                📚 Thesis
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('thesisWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('thesisWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('thesisWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-content document-content">
+
+            <h1>
+                Infernal Flora in Temperate Wetlands
+            </h1>
+
+            <hr>
+
+            <p>
+                <strong>Author:</strong>
+                [STUDENT NAME]
+            </p>
+
+            <p>
+                Department of Marine and Environmental Science
+            </p>
+
+            <p>
+                Stanastasia University
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Working Draft</strong>
+            </p>
+
+            <p>
+                This document contains the current working
+                draft of the author's thesis.
+            </p>
+
+            <p>
+                Several sections remain incomplete.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- INTERNET EXPLORER -->
+
+    <div
+        id="browserWindow"
+        class="os-window"
+        style="top:80px; left:180px; width:850px; height:600px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                🌐 Internet Explorer
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('browserWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('browserWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('browserWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="browser-menu">
+
+            File
+            &nbsp;&nbsp;
+            Edit
+            &nbsp;&nbsp;
+            View
+            &nbsp;&nbsp;
+            Favorites
+            &nbsp;&nbsp;
+            Tools
+            &nbsp;&nbsp;
+            Help
+
+        </div>
+
+
+        <div class="browser-toolbar">
+
+            <button>←</button>
+            <button>→</button>
+            <button>↻</button>
+            <button>⌂</button>
+
+            <input
+                type="text"
+                value="http://www.stanastasia.ac.nz/"
+                readonly>
+
+            <button>Go</button>
+
+        </div>
+
+
+        <div class="browser-page">
+
+            <h1>
+                Stanastasia University
+            </h1>
+
+            <p>
+                Welcome to the Stanastasia University
+                information network.
+            </p>
+
+            <hr>
+
+            <h3>
+                University Resources
+            </h3>
+
+            <ul>
+
+                <li>
+                    Research Database
+                </li>
+
+                <li>
+                    University Repository
+                </li>
+
+                <li>
+                    Student Forum
+                </li>
+
+                <li>
+                    Newspaper Archive
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- EMAIL -->
+
+    <div
+        id="emailWindow"
+        class="os-window"
+        style="top:120px; left:220px; width:700px; height:500px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                ✉️ Student Email
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('emailWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('emailWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('emailWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-content email-content">
+
+            <div class="email-sidebar">
+
+                <strong>
+                    Mailboxes
+                </strong>
+
+                <div>
+                    Inbox (12)
+                </div>
+
+                <div>
+                    Sent
+                </div>
+
+                <div>
+                    Drafts
+                </div>
+
+                <div>
+                    Deleted
+                </div>
+
+            </div>
+
+
+            <div class="email-main">
+
+                <h3>
+                    Inbox
+                </h3>
+
+                <hr>
+
+                <p>
+                    <strong>
+                        Dr. █████████
+                    </strong>
+                    &nbsp;
+                    Re: Thesis Proposal
+                </p>
+
+                <p>
+                    <strong>
+                        Hopkins Corporation
+                    </strong>
+                    &nbsp;
+                    Research Access
+                </p>
+
+                <p>
+                    <strong>
+                        Sarah
+                    </strong>
+                    &nbsp;
+                    are you coming tonight?
+                </p>
+
+                <p>
+                    <strong>
+                        [NO SUBJECT]
+                    </strong>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- NEWSPAPER -->
+
+    <div
+        id="newspaperWindow"
+        class="os-window"
+        style="top:180px; left:270px; width:700px; height:480px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                📰 Newspaper Archive
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('newspaperWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('newspaperWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('newspaperWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-content archive-content">
+
+            <h2>
+                Stanastasia University Newspaper Archive
+            </h2>
+
+            <p>
+                Search archived issues from 1950–2005.
+            </p>
+
+            <hr>
+
+            <p>
+                <strong>
+                    June 2002
+                </strong>
+            </p>
+
+            <p>
+                Hopkins Corporation announces expansion
+                of Marine Science Division.
+            </p>
+
+            <p>
+                <strong>
+                    May 2002
+                </strong>
+            </p>
+
+            <p>
+                University research partnership renewed.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RESEARCH DATABASE -->
+
+    <div
+        id="researchWindow"
+        class="os-window"
+        style="top:150px; left:320px; width:750px; height:520px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                🔬 University Research Database
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('researchWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('researchWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('researchWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-content research-content">
+
+            <h2>
+                UNIVERSITY RESEARCH DATABASE
+            </h2>
+
+            <p>
+                Search the university's collection
+                of research projects and publications.
+            </p>
+
+            <hr>
+
+            <h3>
+                Recent Records
+            </h3>
+
+            <div class="research-record">
+
+                <strong>
+                    BIO-1973-011
+                </strong>
+
+                <br>
+
+                Infernal Flora in Temperate Wetlands
+
+                <br>
+
+                <small>
+                    Marine Science Division
+                </small>
+
+            </div>
+
+
+            <div class="research-record">
+
+                <strong>
+                    MAR-2001-044
+                </strong>
+
+                <br>
+
+                Coastal Wetland Biodiversity Survey
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RECYCLE BIN -->
+
+    <div
+        id="recycleWindow"
+        class="os-window"
+        style="top:200px; left:400px; width:500px; height:350px;">
+
+        <div class="window-titlebar">
+
+            <span>
+                🗑️ Recycle Bin
+            </span>
+
+            <div class="window-buttons">
+
+                <button onclick="minimizeWindow('recycleWindow')">
+                    _
+                </button>
+
+                <button onclick="maximizeWindow('recycleWindow')">
+                    □
+                </button>
+
+                <button onclick="closeWindow('recycleWindow')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="window-content recycle-content">
+
+            <p>
+                The Recycle Bin is empty.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         TASKBAR
+    ========================================== -->
+
+    <div id="taskbar">
+
+
+        <button
+            id="start-button"
+            onclick="toggleStartMenu()">
+
+            <strong>
+                Windows
+            </strong>
+
+        </button>
+
+
+        <div id="taskbar-programs"></div>
+
+
+        <div id="system-tray">
+
+            <span>
+                🔊
+            </span>
+
+            <span>
+                🌐
+            </span>
+
+            <span id="clock">
+                9:43 PM
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         START MENU
+    ========================================== -->
+
+    <div
+        id="start-menu"
+        class="hidden">
+
+        <div class="start-header">
+
+            STANASTASIA
+            UNIVERSITY
+
+        </div>
+
+
+        <div class="start-item"
+             onclick="openWindow('computerWindow')">
+
+            💻 My Computer
+
+        </div>
+
+
+        <div class="start-item"
+             onclick="openWindow('documentsWindow')">
+
+            📁 My Documents
+
+        </div>
+
+
+        <div class="start-item"
+             onclick="openWindow('browserWindow')">
+
+            🌐 Internet Explorer
+
+        </div>
+
+
+        <div class="start-item"
+             onclick="openWindow('emailWindow')">
+
+            ✉️ Student Email
+
+        </div>
+
+
+        <div class="start-item"
+             onclick="openWindow('researchWindow')">
+
+            🔬 Research Database
+
+        </div>
+
+
+        <div class="start-divider"></div>
+
+
+        <div class="start-item">
+
+            ⚙️ Control Panel
+
+        </div>
+
+
+        <div class="start-item">
+
+            ❓ Help and Support
+
+        </div>
+
+
+        <div class="start-divider"></div>
+
+
+        <div class="start-item">
+
+            ⏻ Shut Down...
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script src="desktop.js"></script>
+
+</body>
+
+</html>
