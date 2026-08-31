@@ -1158,3 +1158,43 @@ body {
     color: #111;
 
 }
+
+
+
+/* =========================================================
+   FIXED FAKE FILE SYSTEM
+========================================================= */
+
+.file-item {
+    user-select: none;
+    cursor: pointer;
+}
+
+.file-item.selected {
+    background: #316ac5;
+    border: 1px dotted #ffffff;
+}
+
+.file-item.selected .file-name {
+    color: #ffffff;
+}
+
+.document-viewer {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff;
+    overflow: auto;
+}
+
+.document-viewer pre {
+    margin: 0;
+    padding: 20px;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    color: #111111;
+}
