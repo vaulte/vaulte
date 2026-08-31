@@ -1,16 +1,22 @@
 /* =========================================
-   STANASTASIA FAKE OS
-   DESKTOP JAVASCRIPT
+   STANASTASIA UNIVERSITY
+   FAKE OS — DESKTOP JAVASCRIPT
 ========================================= */
 
 
 /* =========================================
-   VARIABLES
+   GLOBAL VARIABLES
 ========================================= */
 
 let highestZ = 100;
 
 let openWindows = {};
+
+let draggedWindow = null;
+
+let dragOffsetX = 0;
+
+let dragOffsetY = 0;
 
 
 /* =========================================
@@ -30,10 +36,7 @@ function openWindow(windowId) {
     windowElement.style.display = "block";
 
 
-    highestZ++;
-
-    windowElement.style.zIndex =
-        highestZ;
+    bringToFront(windowId);
 
 
     openWindows[windowId] = true;
@@ -107,6 +110,11 @@ function maximizeWindow(windowId) {
     }
 
 
+    /*
+        If already maximized,
+        restore the previous position.
+    */
+
     if (
         windowElement.dataset.maximized ===
         "true"
@@ -124,13 +132,22 @@ function maximizeWindow(windowId) {
         windowElement.style.height =
             windowElement.dataset.oldHeight;
 
+
         windowElement.dataset.maximized =
             "false";
+
+
+        bringToFront(windowId);
+
 
         return;
 
     }
 
+
+    /*
+        Save the current dimensions.
+    */
 
     windowElement.dataset.oldTop =
         windowElement.style.top;
@@ -144,6 +161,10 @@ function maximizeWindow(windowId) {
     windowElement.dataset.oldHeight =
         windowElement.style.height;
 
+
+    /*
+        Maximize.
+    */
 
     windowElement.style.top =
         "0px";
@@ -183,10 +204,250 @@ function bringToFront(windowId) {
 
     highestZ++;
 
+
     windowElement.style.zIndex =
         highestZ;
 
 }
+
+
+/* =========================================
+   WINDOW DRAGGING
+========================================= */
+
+
+/*
+    Start dragging when the user presses
+    the mouse button on a title bar.
+*/
+
+document.addEventListener(
+    "mousedown",
+    function(event) {
+
+        const titlebar =
+            event.target.closest(
+                ".window-titlebar"
+            );
+
+
+        /*
+            Ignore clicks that aren't
+            on a title bar.
+        */
+
+        if (!titlebar) {
+            return;
+        }
+
+
+        const windowElement =
+            titlebar.closest(
+                ".os-window"
+            );
+
+
+        if (!windowElement) {
+            return;
+        }
+
+
+        /*
+            Don't start dragging when the
+            user clicks one of the window
+            control buttons.
+        */
+
+        if (
+            event.target.closest(
+                ".window-buttons"
+            )
+        ) {
+            return;
+        }
+
+
+        /*
+            Don't drag maximized windows.
+        */
+
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+            return;
+        }
+
+
+        draggedWindow =
+            windowElement;
+
+
+        /*
+            Bring the window forward.
+        */
+
+        highestZ++;
+
+
+        windowElement.style.zIndex =
+            highestZ;
+
+
+        /*
+            Find the current position
+            of the window.
+        */
+
+        const rect =
+            windowElement.getBoundingClientRect();
+
+
+        /*
+            Remember where inside the
+            title bar the mouse was clicked.
+        */
+
+        dragOffsetX =
+            event.clientX -
+            rect.left;
+
+
+        dragOffsetY =
+            event.clientY -
+            rect.top;
+
+
+        /*
+            Change cursor.
+        */
+
+        document.body.style.cursor =
+            "move";
+
+
+        /*
+            Prevent text selection.
+        */
+
+        event.preventDefault();
+
+    }
+);
+
+
+/*
+    Move the window while the mouse
+    is being held down.
+*/
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        if (!draggedWindow) {
+            return;
+        }
+
+
+        const desktop =
+            document.getElementById(
+                "desktop"
+            );
+
+
+        const desktopRect =
+            desktop.getBoundingClientRect();
+
+
+        /*
+            Calculate the new position.
+        */
+
+        let newLeft =
+            event.clientX -
+            desktopRect.left -
+            dragOffsetX;
+
+
+        let newTop =
+            event.clientY -
+            desktopRect.top -
+            dragOffsetY;
+
+
+        /*
+            Keep the window inside
+            the desktop.
+        */
+
+        const maxLeft =
+            desktopRect.width -
+            draggedWindow.offsetWidth;
+
+
+        const maxTop =
+            desktopRect.height -
+            32 -
+            draggedWindow.offsetHeight;
+
+
+        newLeft =
+            Math.max(
+                0,
+                Math.min(
+                    newLeft,
+                    maxLeft
+                )
+            );
+
+
+        newTop =
+            Math.max(
+                0,
+                Math.min(
+                    newTop,
+                    maxTop
+                )
+            );
+
+
+        /*
+            Apply the position.
+        */
+
+        draggedWindow.style.left =
+            newLeft + "px";
+
+
+        draggedWindow.style.top =
+            newTop + "px";
+
+    }
+);
+
+
+/*
+    Stop dragging.
+*/
+
+document.addEventListener(
+    "mouseup",
+    function() {
+
+        if (!draggedWindow) {
+            return;
+        }
+
+
+        draggedWindow = null;
+
+
+        document.body.style.cursor =
+            "default";
+
+    }
+);
 
 
 /* =========================================
@@ -219,10 +480,9 @@ function updateTaskbar() {
 
 
             const title =
-                windowElement
-                    .querySelector(
-                        ".window-titlebar span"
-                    );
+                windowElement.querySelector(
+                    ".window-titlebar span"
+                );
 
 
             const button =
@@ -241,6 +501,12 @@ function updateTaskbar() {
                     : "Application";
 
 
+            /*
+                Restore / minimize
+                when taskbar button
+                is clicked.
+            */
+
             button.onclick =
                 function() {
 
@@ -252,19 +518,47 @@ function updateTaskbar() {
                         windowElement.style
                             .display = "block";
 
-                        bringToFront(windowId);
 
-                    } else {
+                        bringToFront(
+                            windowId
+                        );
 
-                        windowElement.style
-                            .display = "none";
+                    }
+
+                    else {
+
+                        /*
+                            If the window is already
+                            in front, minimize it.
+                        */
+
+                        if (
+                            parseInt(
+                                windowElement.style.zIndex
+                            ) === highestZ
+                        ) {
+
+                            windowElement.style
+                                .display = "none";
+
+                        }
+
+                        else {
+
+                            bringToFront(
+                                windowId
+                            );
+
+                        }
 
                     }
 
                 };
 
 
-            taskbar.appendChild(button);
+            taskbar.appendChild(
+                button
+            );
 
         }
     );
@@ -292,7 +586,8 @@ function toggleStartMenu() {
 
 
 /* =========================================
-   CLOSE START MENU WHEN CLICKING DESKTOP
+   CLOSE START MENU WHEN CLICKING
+   SOMEWHERE ELSE
 ========================================= */
 
 document.addEventListener(
@@ -303,6 +598,7 @@ document.addEventListener(
             document.getElementById(
                 "start-menu"
             );
+
 
         const startButton =
             document.getElementById(
@@ -326,7 +622,7 @@ document.addEventListener(
 
 
 /* =========================================
-   CLICK WINDOWS TO BRING THEM FORWARD
+   BRING WINDOWS FORWARD
 ========================================= */
 
 document.addEventListener(
@@ -344,10 +640,30 @@ document.addEventListener(
         }
 
 
-        highestZ++;
+        bringToFront(
+            windowElement.id
+        );
 
-        windowElement.style.zIndex =
-            highestZ;
+    }
+);
+
+
+/* =========================================
+   DESKTOP DOUBLE CLICK
+========================================= */
+
+document.addEventListener(
+    "dblclick",
+    function(event) {
+
+        /*
+            This is intentionally left
+            available for future use.
+
+            Later we can use this for things
+            like opening files, folders,
+            shortcuts, etc.
+        */
 
     }
 );
@@ -363,6 +679,11 @@ function updateClock() {
         document.getElementById(
             "clock"
         );
+
+
+    if (!clock) {
+        return;
+    }
 
 
     const now =
@@ -394,7 +715,10 @@ function updateClock() {
     minutes =
         minutes
             .toString()
-            .padStart(2, "0");
+            .padStart(
+                2,
+                "0"
+            );
 
 
     clock.textContent =
