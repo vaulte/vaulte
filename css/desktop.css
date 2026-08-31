@@ -929,3 +929,232 @@ body {
     display:none !important;
 
 }
+
+
+
+/* =========================================
+   FILE EXPLORER
+========================================= */
+
+.file-explorer {
+    background: #ece9d8;
+}
+
+
+/* =========================================
+   EXPLORER TOOLBAR
+========================================= */
+
+.explorer-toolbar {
+
+    height: 34px;
+
+    background: #f4f2e9;
+
+    border-bottom:
+        1px solid #999;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 4px;
+
+    box-sizing: border-box;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+
+}
+
+
+.explorer-toolbar button {
+
+    height: 24px;
+
+    padding:
+        2px 10px;
+
+    border:
+        1px solid #888;
+
+    background:
+        linear-gradient(
+            #ffffff,
+            #dcdcdc
+        );
+
+    font-size: 11px;
+
+}
+
+
+.explorer-toolbar button:active {
+
+    background:
+        linear-gradient(
+            #cccccc,
+            #eeeeee
+        );
+
+}
+
+
+#folder-path {
+
+    margin-left: 8px;
+
+    color: #333;
+
+}
+
+
+/* =========================================
+   EXPLORER CONTENT
+========================================= */
+
+.explorer-content {
+
+    position: absolute;
+
+    top: 70px;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    background: white;
+
+    border-top:
+        1px solid #aaa;
+
+    padding: 14px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-content: flex-start;
+
+    gap: 12px;
+
+    overflow: auto;
+
+}
+
+
+/* =========================================
+   FILE / FOLDER ICON
+========================================= */
+
+.file-item {
+
+    width: 85px;
+
+    height: 85px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    padding: 5px;
+
+    box-sizing: border-box;
+
+    cursor: default;
+
+}
+
+
+.file-item:hover {
+
+    background:
+        #dbe9f8;
+
+    border:
+        1px dotted #316ac5;
+
+}
+
+
+.file-icon {
+
+    font-size: 38px;
+
+    line-height: 45px;
+
+}
+
+
+.file-name {
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+
+    text-align: center;
+
+    color: #000;
+
+    max-width: 80px;
+
+    word-wrap: break-word;
+
+}
+
+
+/* =========================================
+   TEXT DOCUMENT
+========================================= */
+
+.document-viewer {
+
+    position: absolute;
+
+    top: 30px;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    background: white;
+
+    overflow: auto;
+
+}
+
+
+.document-viewer pre {
+
+    margin: 0;
+
+    padding: 20px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+
+    color: #111;
+
+}
