@@ -1,0 +1,931 @@
+/* =========================================
+   STANASTASIA FAKE OS
+   DESKTOP CSS
+========================================= */
+
+
+/* =========================================
+   BASIC RESET
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    width:100%;
+    height:100%;
+
+    margin:0;
+    padding:0;
+
+    overflow:hidden;
+
+    font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    font-size:11px;
+
+}
+
+
+/* =========================================
+   DESKTOP
+========================================= */
+
+#desktop {
+
+    position:relative;
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    background-color:#245d9c;
+
+    /*
+       Temporary wallpaper.
+
+       We can replace this later with an
+       actual 2000s university desktop image.
+    */
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.05),
+            rgba(0,0,0,.05)
+        );
+
+}
+
+
+/* =========================================
+   DESKTOP ICONS
+========================================= */
+
+.desktop-icons {
+
+    position:absolute;
+
+    top:15px;
+    left:15px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+
+.desktop-icon {
+
+    width:85px;
+
+    min-height:70px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    color:white;
+
+    text-align:center;
+
+    user-select:none;
+
+}
+
+
+.desktop-icon:hover {
+
+    background:rgba(0,70,150,.45);
+
+}
+
+
+.icon-image {
+
+    font-size:32px;
+
+    line-height:35px;
+
+    text-shadow:
+        1px 1px 2px black;
+
+}
+
+
+.icon-label {
+
+    margin-top:4px;
+
+    padding:2px 3px;
+
+    font-size:11px;
+
+    text-shadow:
+        1px 1px 2px #000;
+
+}
+
+
+/* =========================================
+   WINDOWS
+========================================= */
+
+.os-window {
+
+    position:absolute;
+
+    display:none;
+
+    min-width:300px;
+    min-height:200px;
+
+    background:#ece9d8;
+
+    border:1px solid #003399;
+
+    box-shadow:
+        3px 3px 8px rgba(0,0,0,.45);
+
+    overflow:hidden;
+
+}
+
+
+/* =========================================
+   WINDOW TITLE BAR
+========================================= */
+
+.window-titlebar {
+
+    height:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding-left:7px;
+
+    color:white;
+
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #4f91d9 0%,
+            #1764b5 45%,
+            #0b4c9c 100%
+        );
+
+    cursor:default;
+
+    user-select:none;
+
+}
+
+
+.window-buttons {
+
+    display:flex;
+
+    gap:2px;
+
+    padding-right:3px;
+
+}
+
+
+.window-buttons button {
+
+    width:19px;
+    height:18px;
+
+    padding:0;
+
+    line-height:15px;
+
+    border:1px solid #17447d;
+
+    background:#dce8f7;
+
+    color:#17365d;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+.window-buttons button:hover {
+
+    background:white;
+
+}
+
+
+/* =========================================
+   TOOLBARS
+========================================= */
+
+.window-toolbar {
+
+    height:26px;
+
+    padding:7px 8px;
+
+    border-bottom:1px solid #aaa;
+
+    background:#f3f2ed;
+
+    color:#222;
+
+}
+
+
+.window-address {
+
+    height:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:4px 7px;
+
+    border-bottom:1px solid #aaa;
+
+    background:#eeeeee;
+
+}
+
+
+.window-address input {
+
+    flex:1;
+
+    height:19px;
+
+    border:1px solid #888;
+
+    background:white;
+
+    font-size:10px;
+
+    padding-left:5px;
+
+}
+
+
+/* =========================================
+   WINDOW CONTENT
+========================================= */
+
+.window-content {
+
+    height:calc(100% - 50px);
+
+    overflow:auto;
+
+    padding:15px;
+
+    background:white;
+
+}
+
+
+.window-content h1 {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:25px;
+
+}
+
+
+.window-content h2 {
+
+    font-size:18px;
+
+}
+
+
+.window-content h3 {
+
+    font-size:14px;
+
+}
+
+
+/* =========================================
+   MY COMPUTER
+========================================= */
+
+.computer-content {
+
+    background:white;
+
+}
+
+
+.folder-grid {
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4, 100px);
+
+    gap:25px;
+
+    margin-top:25px;
+
+}
+
+
+.folder {
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+}
+
+
+.folder:first-letter {
+
+    font-size:30px;
+
+}
+
+
+/* =========================================
+   FILE LIST
+========================================= */
+
+.file-list {
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3, 150px);
+
+    gap:20px;
+
+}
+
+
+.file {
+
+    padding:10px;
+
+    border:1px solid transparent;
+
+    cursor:pointer;
+
+}
+
+
+.file:hover {
+
+    border:1px solid #316ac5;
+
+    background:#dce9f8;
+
+}
+
+
+/* =========================================
+   DOCUMENT
+========================================= */
+
+.document-content {
+
+    padding:35px 55px;
+
+    color:#111;
+
+    line-height:1.6;
+
+}
+
+
+.document-content h1 {
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+
+/* =========================================
+   BROWSER
+========================================= */
+
+.browser-menu {
+
+    height:25px;
+
+    padding:6px 8px;
+
+    background:#efefef;
+
+    border-bottom:1px solid #aaa;
+
+}
+
+
+.browser-toolbar {
+
+    height:38px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    padding:5px;
+
+    background:#eeeeee;
+
+    border-bottom:1px solid #999;
+
+}
+
+
+.browser-toolbar button {
+
+    height:25px;
+
+    min-width:28px;
+
+    border:1px solid #999;
+
+    background:#eee;
+
+    cursor:pointer;
+
+}
+
+
+.browser-toolbar button:hover {
+
+    background:white;
+
+}
+
+
+.browser-toolbar input {
+
+    flex:1;
+
+    height:24px;
+
+    border:1px solid #777;
+
+    padding-left:7px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size:10px;
+
+}
+
+
+.browser-page {
+
+    position:absolute;
+
+    top:87px;
+    bottom:0;
+    left:0;
+    right:0;
+
+    overflow:auto;
+
+    padding:25px;
+
+    background:white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+}
+
+
+.browser-page h1 {
+
+    color:#174b88;
+
+    font-size:25px;
+
+}
+
+
+/* =========================================
+   EMAIL
+========================================= */
+
+.email-content {
+
+    display:flex;
+
+    padding:0;
+
+}
+
+
+.email-sidebar {
+
+    width:145px;
+
+    padding:15px;
+
+    background:#eeeeee;
+
+    border-right:1px solid #aaa;
+
+    line-height:2;
+
+}
+
+
+.email-sidebar div {
+
+    cursor:pointer;
+
+}
+
+
+.email-sidebar div:hover {
+
+    background:#d8e7f7;
+
+}
+
+
+.email-main {
+
+    flex:1;
+
+    padding:15px;
+
+}
+
+
+.email-main p {
+
+    padding:8px;
+
+    margin:0;
+
+    border-bottom:1px solid #ddd;
+
+    cursor:pointer;
+
+}
+
+
+.email-main p:hover {
+
+    background:#e6eef8;
+
+}
+
+
+/* =========================================
+   RESEARCH DATABASE
+========================================= */
+
+.research-record {
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border:1px solid #aaa;
+
+    background:#f6f6f6;
+
+    cursor:pointer;
+
+}
+
+
+.research-record:hover {
+
+    background:#e5edf7;
+
+}
+
+
+/* =========================================
+   ARCHIVE
+========================================= */
+
+.archive-content {
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+}
+
+
+.archive-content h2 {
+
+    border-bottom:3px double #333;
+
+    padding-bottom:8px;
+
+}
+
+
+/* =========================================
+   RECYCLE BIN
+========================================= */
+
+.recycle-content {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#555;
+
+}
+
+
+/* =========================================
+   TASKBAR
+========================================= */
+
+#taskbar {
+
+    position:absolute;
+
+    bottom:0;
+    left:0;
+    right:0;
+
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:3px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #3d8bd4,
+            #1556a4
+        );
+
+    border-top:1px solid #72a9dd;
+
+    z-index:9999;
+
+}
+
+
+#start-button {
+
+    height:26px;
+
+    min-width:90px;
+
+    padding:0 15px;
+
+    border-radius:
+        3px 10px 10px 3px;
+
+    border:1px solid #124278;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #62b34c,
+            #328b27
+        );
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+#start-button:hover {
+
+    background:
+        linear-gradient(
+            to bottom,
+            #72c75c,
+            #3a9e2f
+        );
+
+}
+
+
+#taskbar-programs {
+
+    display:flex;
+
+    flex:1;
+
+    gap:3px;
+
+    padding-left:5px;
+
+}
+
+
+.taskbar-button {
+
+    height:25px;
+
+    min-width:130px;
+
+    padding:0 10px;
+
+    border:1px solid #124278;
+
+    background:#3e82c2;
+
+    color:white;
+
+    text-align:left;
+
+    cursor:pointer;
+
+}
+
+
+.taskbar-button:hover {
+
+    background:#5b9ad4;
+
+}
+
+
+/* =========================================
+   SYSTEM TRAY
+========================================= */
+
+#system-tray {
+
+    height:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:
+        0 10px;
+
+    border-left:1px solid #174c87;
+
+    background:#2672b9;
+
+    color:white;
+
+}
+
+
+#clock {
+
+    min-width:65px;
+
+    text-align:center;
+
+}
+
+
+/* =========================================
+   START MENU
+========================================= */
+
+#start-menu {
+
+    position:absolute;
+
+    bottom:32px;
+    left:3px;
+
+    width:270px;
+
+    background:#eeeeee;
+
+    border:1px solid #174b8d;
+
+    box-shadow:
+        3px 3px 8px rgba(0,0,0,.45);
+
+    z-index:10000;
+
+}
+
+
+.start-header {
+
+    padding:18px 12px;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #4d91d5,
+            #1459a6
+        );
+
+}
+
+
+.start-item {
+
+    padding:9px 13px;
+
+    cursor:pointer;
+
+}
+
+
+.start-item:hover {
+
+    background:#316ac5;
+
+    color:white;
+
+}
+
+
+.start-divider {
+
+    height:1px;
+
+    margin:3px 8px;
+
+    background:#aaa;
+
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+
+    display:none !important;
+
+}
