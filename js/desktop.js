@@ -14,9 +14,25 @@ let openWindows = {};
 
 let draggedWindow = null;
 
+let resizedWindow = null;
+
 let dragOffsetX = 0;
 
 let dragOffsetY = 0;
+
+let resizeDirection = "";
+
+let resizeStartX = 0;
+
+let resizeStartY = 0;
+
+let resizeStartWidth = 0;
+
+let resizeStartHeight = 0;
+
+let resizeStartLeft = 0;
+
+let resizeStartTop = 0;
 
 
 /* =========================================
@@ -32,15 +48,11 @@ function openWindow(windowId) {
         return;
     }
 
-
     windowElement.style.display = "block";
-
 
     bringToFront(windowId);
 
-
     openWindows[windowId] = true;
-
 
     updateTaskbar();
 
@@ -60,13 +72,10 @@ function closeWindow(windowId) {
         return;
     }
 
-
     windowElement.style.display =
         "none";
 
-
     delete openWindows[windowId];
-
 
     updateTaskbar();
 
@@ -86,10 +95,8 @@ function minimizeWindow(windowId) {
         return;
     }
 
-
     windowElement.style.display =
         "none";
-
 
     updateTaskbar();
 
@@ -111,8 +118,7 @@ function maximizeWindow(windowId) {
 
 
     /*
-        If already maximized,
-        restore the previous position.
+        RESTORE
     */
 
     if (
@@ -132,21 +138,17 @@ function maximizeWindow(windowId) {
         windowElement.style.height =
             windowElement.dataset.oldHeight;
 
-
         windowElement.dataset.maximized =
             "false";
 
-
         bringToFront(windowId);
 
-
         return;
-
     }
 
 
     /*
-        Save the current dimensions.
+        SAVE CURRENT POSITION
     */
 
     windowElement.dataset.oldTop =
@@ -163,7 +165,7 @@ function maximizeWindow(windowId) {
 
 
     /*
-        Maximize.
+        MAXIMIZE
     */
 
     windowElement.style.top =
@@ -201,9 +203,7 @@ function bringToFront(windowId) {
         return;
     }
 
-
     highestZ++;
-
 
     windowElement.style.zIndex =
         highestZ;
@@ -215,26 +215,20 @@ function bringToFront(windowId) {
    WINDOW DRAGGING
 ========================================= */
 
-
-/*
-    Start dragging when the user presses
-    the mouse button on a title bar.
-*/
-
 document.addEventListener(
     "mousedown",
     function(event) {
+
+        /*
+            Check whether the click happened
+            on a title bar.
+        */
 
         const titlebar =
             event.target.closest(
                 ".window-titlebar"
             );
 
-
-        /*
-            Ignore clicks that aren't
-            on a title bar.
-        */
 
         if (!titlebar) {
             return;
@@ -253,9 +247,8 @@ document.addEventListener(
 
 
         /*
-            Don't start dragging when the
-            user clicks one of the window
-            control buttons.
+            Don't drag when clicking
+            the window controls.
         */
 
         if (
@@ -283,30 +276,14 @@ document.addEventListener(
             windowElement;
 
 
-        /*
-            Bring the window forward.
-        */
+        bringToFront(
+            windowElement.id
+        );
 
-        highestZ++;
-
-
-        windowElement.style.zIndex =
-            highestZ;
-
-
-        /*
-            Find the current position
-            of the window.
-        */
 
         const rect =
             windowElement.getBoundingClientRect();
 
-
-        /*
-            Remember where inside the
-            title bar the mouse was clicked.
-        */
 
         dragOffsetX =
             event.clientX -
@@ -318,17 +295,9 @@ document.addEventListener(
             rect.top;
 
 
-        /*
-            Change cursor.
-        */
-
         document.body.style.cursor =
             "move";
 
-
-        /*
-            Prevent text selection.
-        */
 
         event.preventDefault();
 
@@ -336,111 +305,631 @@ document.addEventListener(
 );
 
 
+/* =========================================
+   WINDOW RESIZING
+========================================= */
+
+
 /*
-    Move the window while the mouse
-    is being held down.
+    Determine which edge/corner the
+    mouse is currently near.
 */
 
+function getResizeDirection(
+    event,
+    windowElement
+) {
+
+    const rect =
+        windowElement.getBoundingClientRect();
+
+
+    const edgeSize = 8;
+
+
+    const mouseX =
+        event.clientX -
+        rect.left;
+
+
+    const mouseY =
+        event.clientY -
+        rect.top;
+
+
+    const nearLeft =
+        mouseX <= edgeSize;
+
+
+    const nearRight =
+        mouseX >=
+        rect.width - edgeSize;
+
+
+    const nearTop =
+        mouseY <= edgeSize;
+
+
+    const nearBottom =
+        mouseY >=
+        rect.height - edgeSize;
+
+
+    /*
+        Corners
+    */
+
+    if (
+        nearTop &&
+        nearLeft
+    ) {
+        return "nw";
+    }
+
+
+    if (
+        nearTop &&
+        nearRight
+    ) {
+        return "ne";
+    }
+
+
+    if (
+        nearBottom &&
+        nearLeft
+    ) {
+        return "sw";
+    }
+
+
+    if (
+        nearBottom &&
+        nearRight
+    ) {
+        return "se";
+    }
+
+
+    /*
+        Edges
+    */
+
+    if (nearLeft) {
+        return "w";
+    }
+
+
+    if (nearRight) {
+        return "e";
+    }
+
+
+    if (nearTop) {
+        return "n";
+    }
+
+
+    if (nearBottom) {
+        return "s";
+    }
+
+
+    return "";
+
+}
+
+
+/* =========================================
+   START RESIZING
+========================================= */
+
 document.addEventListener(
-    "mousemove",
+    "mousedown",
     function(event) {
 
-        if (!draggedWindow) {
+        /*
+            Don't resize when clicking
+            title bars.
+        */
+
+        if (
+            event.target.closest(
+                ".window-titlebar"
+            )
+        ) {
             return;
         }
 
 
-        const desktop =
-            document.getElementById(
-                "desktop"
+        const windowElement =
+            event.target.closest(
+                ".os-window"
             );
 
 
-        const desktopRect =
-            desktop.getBoundingClientRect();
+        if (!windowElement) {
+            return;
+        }
 
 
         /*
-            Calculate the new position.
+            Maximized windows can't resize.
         */
 
-        let newLeft =
-            event.clientX -
-            desktopRect.left -
-            dragOffsetX;
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+            return;
+        }
 
 
-        let newTop =
-            event.clientY -
-            desktopRect.top -
-            dragOffsetY;
-
-
-        /*
-            Keep the window inside
-            the desktop.
-        */
-
-        const maxLeft =
-            desktopRect.width -
-            draggedWindow.offsetWidth;
-
-
-        const maxTop =
-            desktopRect.height -
-            32 -
-            draggedWindow.offsetHeight;
-
-
-        newLeft =
-            Math.max(
-                0,
-                Math.min(
-                    newLeft,
-                    maxLeft
-                )
+        const direction =
+            getResizeDirection(
+                event,
+                windowElement
             );
 
 
-        newTop =
-            Math.max(
-                0,
-                Math.min(
-                    newTop,
-                    maxTop
-                )
-            );
+        if (!direction) {
+            return;
+        }
+
+
+        resizedWindow =
+            windowElement;
+
+
+        resizeDirection =
+            direction;
+
+
+        bringToFront(
+            windowElement.id
+        );
 
 
         /*
-            Apply the position.
+            Store starting values.
         */
 
-        draggedWindow.style.left =
-            newLeft + "px";
+        const rect =
+            windowElement.getBoundingClientRect();
 
 
-        draggedWindow.style.top =
-            newTop + "px";
+        resizeStartX =
+            event.clientX;
+
+
+        resizeStartY =
+            event.clientY;
+
+
+        resizeStartWidth =
+            rect.width;
+
+
+        resizeStartHeight =
+            rect.height;
+
+
+        resizeStartLeft =
+            windowElement.offsetLeft;
+
+
+        resizeStartTop =
+            windowElement.offsetTop;
+
+
+        /*
+            Change cursor.
+        */
+
+        document.body.style.cursor =
+            getResizeCursor(
+                direction
+            );
+
+
+        event.preventDefault();
 
     }
 );
 
 
-/*
-    Stop dragging.
-*/
+/* =========================================
+   RESIZE CURSOR
+========================================= */
+
+function getResizeCursor(direction) {
+
+    switch (direction) {
+
+        case "nw":
+            return "nwse-resize";
+
+        case "ne":
+            return "nesw-resize";
+
+        case "sw":
+            return "nesw-resize";
+
+        case "se":
+            return "nwse-resize";
+
+        case "n":
+            return "ns-resize";
+
+        case "s":
+            return "ns-resize";
+
+        case "e":
+            return "ew-resize";
+
+        case "w":
+            return "ew-resize";
+
+        default:
+            return "default";
+
+    }
+
+}
+
+
+/* =========================================
+   MOUSE MOVEMENT
+========================================= */
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+
+        /* =====================================
+           DRAGGING
+        ===================================== */
+
+        if (draggedWindow) {
+
+            const desktop =
+                document.getElementById(
+                    "desktop"
+                );
+
+
+            const desktopRect =
+                desktop.getBoundingClientRect();
+
+
+            let newLeft =
+                event.clientX -
+                desktopRect.left -
+                dragOffsetX;
+
+
+            let newTop =
+                event.clientY -
+                desktopRect.top -
+                dragOffsetY;
+
+
+            /*
+                Keep inside desktop.
+            */
+
+            const maxLeft =
+                desktopRect.width -
+                draggedWindow.offsetWidth;
+
+
+            const maxTop =
+                desktopRect.height -
+                32 -
+                draggedWindow.offsetHeight;
+
+
+            newLeft =
+                Math.max(
+                    0,
+                    Math.min(
+                        newLeft,
+                        maxLeft
+                    )
+                );
+
+
+            newTop =
+                Math.max(
+                    0,
+                    Math.min(
+                        newTop,
+                        maxTop
+                    )
+                );
+
+
+            draggedWindow.style.left =
+                newLeft + "px";
+
+
+            draggedWindow.style.top =
+                newTop + "px";
+
+
+            return;
+
+        }
+
+
+        /* =====================================
+           RESIZING
+        ===================================== */
+
+        if (resizedWindow) {
+
+            resizeWindow(
+                event
+            );
+
+            return;
+
+        }
+
+
+        /* =====================================
+           RESIZE CURSOR PREVIEW
+        ===================================== */
+
+        const windowElement =
+            event.target.closest(
+                ".os-window"
+            );
+
+
+        if (!windowElement) {
+
+            document.body.style.cursor =
+                "default";
+
+            return;
+
+        }
+
+
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+            return;
+        }
+
+
+        const direction =
+            getResizeDirection(
+                event,
+                windowElement
+            );
+
+
+        if (direction) {
+
+            document.body.style.cursor =
+                getResizeCursor(
+                    direction
+                );
+
+        }
+
+        else {
+
+            document.body.style.cursor =
+                "default";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   RESIZE WINDOW
+========================================= */
+
+function resizeWindow(event) {
+
+    const dx =
+        event.clientX -
+        resizeStartX;
+
+
+    const dy =
+        event.clientY -
+        resizeStartY;
+
+
+    const minWidth = 300;
+
+    const minHeight = 200;
+
+
+    let newWidth =
+        resizeStartWidth;
+
+
+    let newHeight =
+        resizeStartHeight;
+
+
+    let newLeft =
+        resizeStartLeft;
+
+
+    let newTop =
+        resizeStartTop;
+
+
+    /*
+        RIGHT
+    */
+
+    if (
+        resizeDirection.includes("e")
+    ) {
+
+        newWidth =
+            resizeStartWidth +
+            dx;
+
+    }
+
+
+    /*
+        LEFT
+    */
+
+    if (
+        resizeDirection.includes("w")
+    ) {
+
+        newWidth =
+            resizeStartWidth -
+            dx;
+
+        newLeft =
+            resizeStartLeft +
+            dx;
+
+    }
+
+
+    /*
+        BOTTOM
+    */
+
+    if (
+        resizeDirection.includes("s")
+    ) {
+
+        newHeight =
+            resizeStartHeight +
+            dy;
+
+    }
+
+
+    /*
+        TOP
+    */
+
+    if (
+        resizeDirection.includes("n")
+    ) {
+
+        newHeight =
+            resizeStartHeight -
+            dy;
+
+        newTop =
+            resizeStartTop +
+            dy;
+
+    }
+
+
+    /*
+        Minimum width.
+    */
+
+    if (
+        newWidth < minWidth
+    ) {
+
+        if (
+            resizeDirection.includes("w")
+        ) {
+
+            newLeft =
+                resizeStartLeft +
+                resizeStartWidth -
+                minWidth;
+
+        }
+
+
+        newWidth =
+            minWidth;
+
+    }
+
+
+    /*
+        Minimum height.
+    */
+
+    if (
+        newHeight < minHeight
+    ) {
+
+        if (
+            resizeDirection.includes("n")
+        ) {
+
+            newTop =
+                resizeStartTop +
+                resizeStartHeight -
+                minHeight;
+
+        }
+
+
+        newHeight =
+            minHeight;
+
+    }
+
+
+    /*
+        Apply dimensions.
+    */
+
+    resizedWindow.style.width =
+        newWidth + "px";
+
+
+    resizedWindow.style.height =
+        newHeight + "px";
+
+
+    resizedWindow.style.left =
+        newLeft + "px";
+
+
+    resizedWindow.style.top =
+        newTop + "px";
+
+}
+
+
+/* =========================================
+   STOP DRAGGING / RESIZING
+========================================= */
 
 document.addEventListener(
     "mouseup",
     function() {
 
-        if (!draggedWindow) {
-            return;
-        }
+        draggedWindow =
+            null;
 
 
-        draggedWindow = null;
+        resizedWindow =
+            null;
+
+
+        resizeDirection =
+            "";
 
 
         document.body.style.cursor =
@@ -501,12 +990,6 @@ function updateTaskbar() {
                     : "Application";
 
 
-            /*
-                Restore / minimize
-                when taskbar button
-                is clicked.
-            */
-
             button.onclick =
                 function() {
 
@@ -526,11 +1009,6 @@ function updateTaskbar() {
                     }
 
                     else {
-
-                        /*
-                            If the window is already
-                            in front, minimize it.
-                        */
 
                         if (
                             parseInt(
@@ -586,8 +1064,7 @@ function toggleStartMenu() {
 
 
 /* =========================================
-   CLOSE START MENU WHEN CLICKING
-   SOMEWHERE ELSE
+   CLOSE START MENU
 ========================================= */
 
 document.addEventListener(
@@ -643,27 +1120,6 @@ document.addEventListener(
         bringToFront(
             windowElement.id
         );
-
-    }
-);
-
-
-/* =========================================
-   DESKTOP DOUBLE CLICK
-========================================= */
-
-document.addEventListener(
-    "dblclick",
-    function(event) {
-
-        /*
-            This is intentionally left
-            available for future use.
-
-            Later we can use this for things
-            like opening files, folders,
-            shortcuts, etc.
-        */
 
     }
 );
