@@ -373,7 +373,7 @@ Selected references:
                                 title: "Thesis Draft 01",
 
                                 content:
-`Adaptation to high iron environments in the <i>Conger conger</i>
+`Adaptation to high iron environments in the Conger conger
 
 THESIS DRAFT
 
