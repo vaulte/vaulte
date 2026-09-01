@@ -740,152 +740,92 @@ function createFileExplorer() {
 ========================================================= */
 
 function renderFolder(folder) {
+    const content = document.getElementById("explorer-content");
 
-    const content =
-        document.getElementById(
-            "explorer-content"
-        );
-
-
-    if (!content) {
-        return;
-    }
-
+    if (!content) return;
 
     content.innerHTML = "";
 
+    Object.keys(folder.children).forEach(function(name) {
 
-    Object.keys(
-        folder.children
-    ).forEach(
-        function(name) {
+        const item = folder.children[name];
 
-            const item =
-                folder.children[name];
+        const element = document.createElement("div");
 
+        element.className = "file-item";
 
-            const element =
-                document.createElement(
-                    "div"
-                );
+        element.dataset.name = name;
+
+        element.dataset.selected = "false";
 
 
-            element.className =
-                "file-item";
+        // Choose icon
+        let icon = "📄";
 
-
-            element.dataset.name =
-                name;
-
-
-            /*
-                ICON
-            */
-
-            let icon = "📄";
-
-
-            if (
-                item.type === "folder"
-            ) {
-
-                icon = "📁";
-
-            }
-
-            else if (
-                item.fileType === "image"
-            ) {
-
-                icon = "🖼️";
-
-            }
-
-            else if (
-                item.fileType === "website"
-            ) {
-
-                icon = "🌐";
-
-            }
-
-
-            element.innerHTML = `
-
-                <div class="file-icon">
-                    ${icon}
-                </div>
-
-                <div class="file-name">
-                    ${name}
-                </div>
-
-            `;
-
-
-            /*
-                SINGLE CLICK
-            */
-
-            element.addEventListener(
-                "click",
-                function(event) {
-
-                    event.stopPropagation();
-
-                    selectFileItem(
-                        element
-                    );
-
-                }
-            );
-
-
-            /*
-                DOUBLE CLICK DISABLED
-                FOR OUR NEW FILE SYSTEM
-            */
-
-            element.addEventListener(
-                "dblclick",
-                function(event) {
-
-                    event.preventDefault();
-
-                }
-            );
-
-
-            /*
-                SINGLE CLICK = OPEN
-            */
-
-            element.addEventListener(
-                "click",
-                function(event) {
-
-                    if (
-                        element.dataset.selected ===
-                        "true"
-                    ) {
-
-                        openFile(
-                            item
-                        );
-
-                    }
-
-                }
-            );
-
-
-            content.appendChild(
-                element
-            );
-
+        if (item.type === "folder") {
+            icon = "📁";
         }
-    );
+        else if (item.fileType === "image") {
+            icon = "🖼️";
+        }
+        else if (item.fileType === "website") {
+            icon = "🌐";
+        }
 
+
+        element.innerHTML = `
+            <div class="file-icon">
+                ${icon}
+            </div>
+
+            <div class="file-name">
+                ${escapeHTML(name)}
+            </div>
+        `;
+
+
+        // SINGLE CLICK
+        element.addEventListener("click", function(event) {
+
+            event.stopPropagation();
+
+
+            // Remove selection from other files
+            document
+                .querySelectorAll(".file-item")
+                .forEach(function(other) {
+
+                    other.dataset.selected = "false";
+
+                    other.classList.remove("selected");
+
+                });
+
+
+            // Select this item
+            element.dataset.selected = "true";
+
+            element.classList.add("selected");
+
+
+            // Immediately open it
+            if (item.type === "folder") {
+
+                openFolder(item, name);
+
+            }
+            else {
+
+                openFile(item);
+
+            }
+
+        });
+
+
+        content.appendChild(element);
+
+    });
 }
 
 
