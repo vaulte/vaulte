@@ -958,7 +958,7 @@ body {
 
 .explorer-toolbar {
 
-    height: 70px;
+    height: 24px;
 
     background: #f4f2e9;
 
@@ -1021,6 +1021,8 @@ body {
     margin-left: 8px;
 
     color: #333;
+
+   height:50px;
 
 }
 
