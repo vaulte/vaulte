@@ -4,92 +4,227 @@
    DESKTOP.JS
 ========================================================= */
 
+
+/* =========================================================
+   WINDOW MANAGEMENT
+========================================================= */
+
 let highestZ = 100;
+
 const openWindows = {};
+
 let draggedWindow = null;
+
 let dragOffsetX = 0;
+
 let dragOffsetY = 0;
+
 let resizedWindow = null;
+
 let resizeDirection = "";
+
 let resizeStartX = 0;
+
 let resizeStartY = 0;
+
 let resizeStartWidth = 0;
+
 let resizeStartHeight = 0;
+
 let resizeStartLeft = 0;
+
 let resizeStartTop = 0;
 
+
+/* =========================================================
+   OPEN EXISTING WINDOW
+========================================================= */
+
 function openWindow(windowId) {
-    const windowElement = document.getElementById(windowId);
-    if (!windowElement) return;
-    windowElement.style.display = "block";
-    bringToFront(windowId);
-    openWindows[windowId] = true;
-    updateTaskbar();
-}
 
-function closeWindow(windowId) {
-    const windowElement = document.getElementById(windowId);
-    if (!windowElement) return;
-    windowElement.style.display = "none";
-    delete openWindows[windowId];
-    updateTaskbar();
-}
+    const windowElement =
+        document.getElementById(windowId);
 
-function minimizeWindow(windowId) {
-    const windowElement = document.getElementById(windowId);
-    if (!windowElement) return;
-    windowElement.style.display = "none";
-    updateTaskbar();
-}
-
-function maximizeWindow(windowId) {
-    const windowElement = document.getElementById(windowId);
-    if (!windowElement) return;
-
-    if (windowElement.dataset.maximized === "true") {
-        windowElement.style.top = windowElement.dataset.oldTop;
-        windowElement.style.left = windowElement.dataset.oldLeft;
-        windowElement.style.width = windowElement.dataset.oldWidth;
-        windowElement.style.height = windowElement.dataset.oldHeight;
-        windowElement.dataset.maximized = "false";
-        bringToFront(windowId);
+    if (!windowElement) {
         return;
     }
 
-    windowElement.dataset.oldTop = windowElement.style.top;
-    windowElement.dataset.oldLeft = windowElement.style.left;
-    windowElement.dataset.oldWidth = windowElement.style.width;
-    windowElement.dataset.oldHeight = windowElement.style.height;
+    windowElement.style.display = "block";
+
+    bringToFront(windowId);
+
+    openWindows[windowId] = true;
+
+    updateTaskbar();
+}
+
+
+/* =========================================================
+   CLOSE WINDOW
+========================================================= */
+
+function closeWindow(windowId) {
+
+    const windowElement =
+        document.getElementById(windowId);
+
+    if (!windowElement) {
+        return;
+    }
+
+    windowElement.style.display = "none";
+
+    delete openWindows[windowId];
+
+    updateTaskbar();
+}
+
+
+/* =========================================================
+   MINIMIZE WINDOW
+========================================================= */
+
+function minimizeWindow(windowId) {
+
+    const windowElement =
+        document.getElementById(windowId);
+
+    if (!windowElement) {
+        return;
+    }
+
+    windowElement.style.display = "none";
+
+    updateTaskbar();
+}
+
+
+/* =========================================================
+   MAXIMIZE / RESTORE
+========================================================= */
+
+function maximizeWindow(windowId) {
+
+    const windowElement =
+        document.getElementById(windowId);
+
+    if (!windowElement) {
+        return;
+    }
+
+
+    /* RESTORE */
+
+    if (
+        windowElement.dataset.maximized === "true"
+    ) {
+
+        windowElement.style.top =
+            windowElement.dataset.oldTop;
+
+        windowElement.style.left =
+            windowElement.dataset.oldLeft;
+
+        windowElement.style.width =
+            windowElement.dataset.oldWidth;
+
+        windowElement.style.height =
+            windowElement.dataset.oldHeight;
+
+        windowElement.dataset.maximized =
+            "false";
+
+        bringToFront(windowId);
+
+        return;
+    }
+
+
+    /* SAVE CURRENT SIZE */
+
+    windowElement.dataset.oldTop =
+        windowElement.style.top;
+
+    windowElement.dataset.oldLeft =
+        windowElement.style.left;
+
+    windowElement.dataset.oldWidth =
+        windowElement.style.width;
+
+    windowElement.dataset.oldHeight =
+        windowElement.style.height;
+
+
+    /* MAXIMIZE */
 
     windowElement.style.top = "0px";
+
     windowElement.style.left = "0px";
+
     windowElement.style.width = "100%";
-    windowElement.style.height = "calc(100% - 32px)";
-    windowElement.dataset.maximized = "true";
+
+    windowElement.style.height =
+        "calc(100% - 32px)";
+
+    windowElement.dataset.maximized =
+        "true";
+
     bringToFront(windowId);
 }
 
+
+/* =========================================================
+   BRING WINDOW TO FRONT
+========================================================= */
+
 function bringToFront(windowId) {
-    const windowElement = document.getElementById(windowId);
-    if (!windowElement) return;
+
+    const windowElement =
+        document.getElementById(windowId);
+
+    if (!windowElement) {
+        return;
+    }
+
     highestZ++;
-    windowElement.style.zIndex = highestZ;
+
+    windowElement.style.zIndex =
+        highestZ;
 }
 
+
+/* =========================================================
+   FAKE FILE SYSTEM
+========================================================= */
+
 const fileSystem = {
+
     "My Documents": {
+
         type: "folder",
+
         children: {
+
             "Thesis": {
+
                 type: "folder",
+
                 children: {
+
                     "Field Notes": {
+
                         type: "folder",
+
                         children: {
+
                             "FIELD_NOTE_001.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Field Note 001",
+
                                 content:
 `LLYN UNIVERSITY
 MARINE SCIENCE DIVISION
@@ -108,10 +243,16 @@ placed in the research directory.
 
 — M. Wake`
                             },
+
+
                             "FIELD_NOTE_002.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Field Note 002",
+
                                 content:
 `LLYN UNIVERSITY
 MARINE SCIENCE DIVISION
@@ -131,10 +272,16 @@ additional samples be collected.
 
 Do not discard previous samples.`
                             },
+
+
                             "FIELD_NOTE_003.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Field Note 003",
+
                                 content:
 `LLYN UNIVERSITY
 MARINE SCIENCE DIVISION
@@ -154,15 +301,26 @@ return tomorrow.
 
 — M. Wake`
                             }
+
                         }
+
                     },
+
+
                     "Research": {
+
                         type: "folder",
+
                         children: {
+
                             "bibliography.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Bibliography",
+
                                 content:
 `THESIS BIBLIOGRAPHY
 
@@ -181,24 +339,41 @@ Selected references:
 5. Aquatic Iron-Cycling
    Microorganisms`
                             },
+
+
                             "research_database.url": {
+
                                 type: "file",
+
                                 fileType: "website",
+
                                 title: "Research Database",
+
                                 url: "research.html"
+
                             }
+
                         }
+
                     },
+
+
                     "Drafts": {
+
                         type: "folder",
+
                         children: {
+
                             "THESIS_DRAFT_01.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Thesis Draft 01",
+
                                 content:
-`INFERNAL FLORA IN
-TEMPERATE WETLANDS
+`Adaptation to high iron environments in the <i>Conger conger</i>
 
 THESIS DRAFT
 
@@ -208,13 +383,18 @@ INTRODUCTION
 
 [DOCUMENT INCOMPLETE]`
                             },
+
+
                             "THESIS_DRAFT_02.txt": {
+
                                 type: "file",
+
                                 fileType: "text",
+
                                 title: "Thesis Draft 02",
+
                                 content:
-`INFERNAL FLORA IN
-TEMPERATE WETLANDS
+`Adaptation to high iron environments in the <i>Conger conger</i>
 
 THESIS DRAFT
 
@@ -224,46 +404,92 @@ ENVIRONMENTAL CONDITIONS
 
 [DOCUMENT INCOMPLETE]`
                             }
+
                         }
+
                     }
+
                 }
+
             },
+
+
             "Photos": {
+
                 type: "folder",
+
                 children: {
+
                     "IMG_001.jpg": {
+
                         type: "file",
+
                         fileType: "image",
+
                         title: "IMG_001"
+
                     },
+
+
                     "IMG_002.jpg": {
+
                         type: "file",
+
                         fileType: "image",
+
                         title: "IMG_002"
+
                     }
+
                 }
+
             },
+
+
             "Downloads": {
+
                 type: "folder",
+
                 children: {
+
                     "University_Repository.url": {
+
                         type: "file",
+
                         fileType: "website",
+
                         title: "University Repository",
+
                         url: "repository.html"
+
                     },
+
+
                     "HopCorp.url": {
+
                         type: "file",
+
                         fileType: "website",
+
                         title: "Hopkins Corporation",
+
                         url: "hopcorp.html"
+
                     }
+
                 }
+
             },
+
+
             "Read Me.txt": {
+
                 type: "file",
+
                 fileType: "text",
+
                 title: "Read Me",
+
                 content:
 `WELCOME
 
@@ -280,453 +506,1713 @@ your work regularly.
 
 - Information Technology`
             }
+
         }
+
     }
+
 };
 
-let currentFolder = fileSystem["My Documents"];
+
+/* =========================================================
+   CURRENT FOLDER
+========================================================= */
+
+let currentFolder =
+    fileSystem["My Documents"];
+
 let folderHistory = [];
-let currentPath = ["My Documents"];
+
+
+/* =========================================================
+   CURRENT PATH
+========================================================= */
+
+let currentPath = [
+    "My Documents"
+];
+
+
+/* =========================================================
+   OPEN FILE EXPLORER
+========================================================= */
 
 function openFileExplorer() {
-    let explorer = document.getElementById("file-explorer");
+
+    let explorer =
+        document.getElementById(
+            "file-explorer"
+        );
+
+
+    /*
+       If our dynamically-created Explorer
+       already exists, simply restore it.
+    */
 
     if (explorer) {
-        explorer.style.display = "block";
-        bringToFront("file-explorer");
-        openWindows["file-explorer"] = true;
+
+        explorer.style.display =
+            "block";
+
+        bringToFront(
+            "file-explorer"
+        );
+
+        openWindows["file-explorer"] =
+            true;
+
         updateTaskbar();
+
         return;
     }
+
 
     createFileExplorer();
 }
 
-function createFileExplorer() {
-    const explorer = document.createElement("div");
 
-    explorer.id = "file-explorer";
-    explorer.className = "os-window file-explorer";
-    explorer.style.width = "650px";
-    explorer.style.height = "430px";
-    explorer.style.left = "300px";
-    explorer.style.top = "130px";
-    explorer.style.display = "block";
-    explorer.style.zIndex = ++highestZ;
+/* =========================================================
+   CREATE FILE EXPLORER
+========================================================= */
+
+function createFileExplorer() {
+
+    const explorer =
+        document.createElement("div");
+
+
+    explorer.id =
+        "file-explorer";
+
+
+    explorer.className =
+        "os-window file-explorer";
+
+
+    explorer.style.width =
+        "650px";
+
+
+    explorer.style.height =
+        "430px";
+
+
+    explorer.style.left =
+        "300px";
+
+
+    explorer.style.top =
+        "130px";
+
+
+    explorer.style.display =
+        "block";
+
+
+    explorer.style.zIndex =
+        ++highestZ;
+
 
     explorer.innerHTML = `
+
         <div class="window-titlebar">
-            <span>📁 My Documents</span>
+
+            <span>
+                📁 My Documents
+            </span>
+
             <div class="window-buttons">
-                <button type="button" onclick="minimizeWindow('file-explorer')">_</button>
-                <button type="button" onclick="maximizeWindow('file-explorer')">□</button>
-                <button type="button" onclick="closeWindow('file-explorer')">×</button>
+
+                <button
+                    type="button"
+                    onclick="
+                        minimizeWindow('file-explorer')
+                    ">
+                    _
+                </button>
+
+                <button
+                    type="button"
+                    onclick="
+                        maximizeWindow('file-explorer')
+                    ">
+                    □
+                </button>
+
+                <button
+                    type="button"
+                    onclick="
+                        closeWindow('file-explorer')
+                    ">
+                    ×
+                </button>
+
             </div>
+
         </div>
+
 
         <div class="window-toolbar">
-            File &nbsp;&nbsp; Edit &nbsp;&nbsp; View &nbsp;&nbsp; Favorites &nbsp;&nbsp; Tools &nbsp;&nbsp; Help
+
+            File
+            &nbsp;&nbsp;
+
+            Edit
+            &nbsp;&nbsp;
+
+            View
+            &nbsp;&nbsp;
+
+            Favorites
+            &nbsp;&nbsp;
+
+            Tools
+            &nbsp;&nbsp;
+
+            Help
+
         </div>
+
 
         <div class="explorer-toolbar">
-            <button type="button" onclick="goBackFolder()">← Back</button>
-            <button type="button" onclick="goUpFolder()">↑ Up</button>
-            <span id="folder-path">My Documents</span>
+
+            <button
+                type="button"
+                onclick="goBackFolder()">
+                ← Back
+            </button>
+
+            <button
+                type="button"
+                onclick="goUpFolder()">
+                ↑ Up
+            </button>
+
+            <span id="folder-path">
+                My Documents
+            </span>
+
         </div>
 
-        <div id="explorer-content" class="explorer-content"></div>
+
+        <div
+            id="explorer-content"
+            class="explorer-content">
+        </div>
+
     `;
 
-    document.getElementById("desktop").appendChild(explorer);
 
-    openWindows["file-explorer"] = true;
-    currentFolder = fileSystem["My Documents"];
+    document
+        .getElementById("desktop")
+        .appendChild(explorer);
+
+
+    openWindows[
+        "file-explorer"
+    ] = true;
+
+
+    currentFolder =
+        fileSystem["My Documents"];
+
+
     folderHistory = [];
-    currentPath = ["My Documents"];
 
-    renderFolder(currentFolder);
+
+    currentPath = [
+        "My Documents"
+    ];
+
+
+    renderFolder(
+        currentFolder
+    );
+
+
     updateTaskbar();
 }
 
+
+/* =========================================================
+   RENDER CURRENT FOLDER
+========================================================= */
+
 function renderFolder(folder) {
-    const content = document.getElementById("explorer-content");
-    if (!content) return;
+
+    const content =
+        document.getElementById(
+            "explorer-content"
+        );
+
+
+    if (!content) {
+        return;
+    }
+
 
     content.innerHTML = "";
 
-    Object.keys(folder.children).forEach(function(name) {
-        const item = folder.children[name];
-        const element = document.createElement("div");
 
-        element.className = "file-item";
-        element.dataset.name = name;
-        element.dataset.selected = "false";
+    Object.keys(
+        folder.children
+    ).forEach(
+        function(name) {
 
-        let icon = "📄";
-        if (item.type === "folder") icon = "📁";
-        else if (item.fileType === "image") icon = "🖼️";
-        else if (item.fileType === "website") icon = "🌐";
+            const item =
+                folder.children[name];
 
-        element.innerHTML = `
-            <div class="file-icon">${icon}</div>
-            <div class="file-name">${escapeHTML(name)}</div>
-        `;
 
-        element.addEventListener("click", function(event) {
-            event.stopPropagation();
+            const element =
+                document.createElement(
+                    "div"
+                );
 
-            document.querySelectorAll(".file-item").forEach(function(other) {
-                other.dataset.selected = "false";
-                other.classList.remove("selected");
-            });
 
-            element.dataset.selected = "true";
-            element.classList.add("selected");
+            element.className =
+                "file-item";
 
-            // Single click opens the item.
-            if (item.type === "folder") {
-                openFolder(item, name);
-            } else {
-                openFile(item);
+
+            element.dataset.name =
+                name;
+
+
+            /*
+                ICON
+            */
+
+            let icon = "📄";
+
+
+            if (
+                item.type === "folder"
+            ) {
+
+                icon = "📁";
+
             }
-        });
 
-        content.appendChild(element);
-    });
+            else if (
+                item.fileType === "image"
+            ) {
+
+                icon = "🖼️";
+
+            }
+
+            else if (
+                item.fileType === "website"
+            ) {
+
+                icon = "🌐";
+
+            }
+
+
+            element.innerHTML = `
+
+                <div class="file-icon">
+                    ${icon}
+                </div>
+
+                <div class="file-name">
+                    ${name}
+                </div>
+
+            `;
+
+
+            /*
+                SINGLE CLICK
+            */
+
+            element.addEventListener(
+                "click",
+                function(event) {
+
+                    event.stopPropagation();
+
+                    selectFileItem(
+                        element
+                    );
+
+                }
+            );
+
+
+            /*
+                DOUBLE CLICK DISABLED
+                FOR OUR NEW FILE SYSTEM
+            */
+
+            element.addEventListener(
+                "dblclick",
+                function(event) {
+
+                    event.preventDefault();
+
+                }
+            );
+
+
+            /*
+                SINGLE CLICK = OPEN
+            */
+
+            element.addEventListener(
+                "click",
+                function(event) {
+
+                    if (
+                        element.dataset.selected ===
+                        "true"
+                    ) {
+
+                        openFile(
+                            item
+                        );
+
+                    }
+
+                }
+            );
+
+
+            content.appendChild(
+                element
+            );
+
+        }
+    );
+
 }
 
-function openFolder(folder, folderName) {
-    folderHistory.push(currentFolder);
-    currentFolder = folder;
-    currentPath.push(folderName);
+
+/* =========================================================
+   SELECT FILE
+========================================================= */
+
+function selectFileItem(element) {
+
+    /*
+        Deselect everything first.
+    */
+
+    document
+        .querySelectorAll(
+            ".file-item"
+        )
+        .forEach(
+            function(item) {
+
+                item.dataset.selected =
+                    "false";
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    /*
+        Select this item.
+    */
+
+    element.dataset.selected =
+        "true";
+
+
+    element.classList.add(
+        "selected"
+    );
+
+}
+
+
+/* =========================================================
+   OPEN FOLDER
+========================================================= */
+
+function openFolder(
+    folder,
+    folderName
+) {
+
+    folderHistory.push(
+        currentFolder
+    );
+
+
+    currentFolder =
+        folder;
+
+
+    currentPath.push(
+        folderName
+    );
+
+
     updateFolderPath();
-    renderFolder(currentFolder);
+
+
+    renderFolder(
+        currentFolder
+    );
+
 }
+
+
+/* =========================================================
+   UPDATE PATH DISPLAY
+========================================================= */
 
 function updateFolderPath() {
-    const path = document.getElementById("folder-path");
-    if (!path) return;
-    path.textContent = currentPath.join(" \\ ");
+
+    const path =
+        document.getElementById(
+            "folder-path"
+        );
+
+
+    if (!path) {
+        return;
+    }
+
+
+    path.textContent =
+        currentPath.join(
+            " \\ "
+        );
+
 }
+
+
+/* =========================================================
+   BACK
+========================================================= */
 
 function goBackFolder() {
-    if (folderHistory.length === 0) return;
 
-    currentFolder = folderHistory.pop();
+    if (
+        folderHistory.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentFolder =
+        folderHistory.pop();
+
+
     currentPath.pop();
 
+
     updateFolderPath();
-    renderFolder(currentFolder);
+
+
+    renderFolder(
+        currentFolder
+    );
+
 }
+
+
+/* =========================================================
+   UP
+========================================================= */
 
 function goUpFolder() {
+
     goBackFolder();
+
 }
+
+
+/* =========================================================
+   OPEN FILE
+========================================================= */
 
 function openFile(file) {
-    if (file.fileType === "text") {
-        openTextDocument(file);
+
+    if (
+        file.fileType === "text"
+    ) {
+
+        openTextDocument(
+            file
+        );
+
         return;
+
     }
 
-    if (file.fileType === "website") {
-        window.open(file.url, "_blank");
+
+    if (
+        file.fileType === "website"
+    ) {
+
+        window.open(
+            file.url,
+            "_blank"
+        );
+
         return;
+
     }
 
-    if (file.fileType === "image") {
-        alert("Image viewer coming soon.");
+
+    if (
+        file.fileType === "image"
+    ) {
+
+        alert(
+            "Image viewer coming soon."
+        );
+
     }
+
 }
+
+
+/* =========================================================
+   OPEN TEXT DOCUMENT
+========================================================= */
 
 function openTextDocument(file) {
-    const id = "document-" + Math.random().toString(36).substring(2, 9);
-    const documentWindow = document.createElement("div");
 
-    documentWindow.id = id;
-    documentWindow.className = "os-window";
-    documentWindow.style.width = "560px";
-    documentWindow.style.height = "420px";
-    documentWindow.style.left = "220px";
-    documentWindow.style.top = "110px";
-    documentWindow.style.display = "block";
-    documentWindow.style.zIndex = ++highestZ;
+    const id =
+        "document-" +
+        Math.random()
+            .toString(36)
+            .substring(2, 9);
+
+
+    const documentWindow =
+        document.createElement(
+            "div"
+        );
+
+
+    documentWindow.id =
+        id;
+
+
+    documentWindow.className =
+        "os-window";
+
+
+    documentWindow.style.width =
+        "560px";
+
+
+    documentWindow.style.height =
+        "420px";
+
+
+    documentWindow.style.left =
+        "220px";
+
+
+    documentWindow.style.top =
+        "110px";
+
+
+    documentWindow.style.display =
+        "block";
+
+
+    documentWindow.style.zIndex =
+        ++highestZ;
+
 
     documentWindow.innerHTML = `
+
         <div class="window-titlebar">
-            <span>📄 ${escapeHTML(file.title)}</span>
+
+            <span>
+                📄 ${escapeHTML(file.title)}
+            </span>
+
             <div class="window-buttons">
-                <button type="button" onclick="minimizeWindow('${id}')">_</button>
-                <button type="button" onclick="maximizeWindow('${id}')">□</button>
-                <button type="button" onclick="closeWindow('${id}')">×</button>
+
+                <button
+                    type="button"
+                    onclick="
+                        minimizeWindow('${id}')
+                    ">
+                    _
+                </button>
+
+                <button
+                    type="button"
+                    onclick="
+                        maximizeWindow('${id}')
+                    ">
+                    □
+                </button>
+
+                <button
+                    type="button"
+                    onclick="
+                        closeWindow('${id}')
+                    ">
+                    ×
+                </button>
+
             </div>
+
         </div>
+
 
         <div class="document-viewer">
+
             <pre></pre>
+
         </div>
+
     `;
 
-    document.getElementById("desktop").appendChild(documentWindow);
 
-    documentWindow.querySelector(".document-viewer pre").textContent = file.content;
+    document
+        .getElementById("desktop")
+        .appendChild(
+            documentWindow
+        );
 
-    openWindows[id] = true;
+
+    /*
+        Use textContent so the note
+        cannot accidentally be interpreted
+        as HTML.
+    */
+
+    documentWindow
+        .querySelector(
+            ".document-viewer pre"
+        )
+        .textContent =
+        file.content;
+
+
+    openWindows[id] =
+        true;
+
+
     bringToFront(id);
+
+
     updateTaskbar();
+
 }
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
     return div.innerHTML;
+
 }
 
-document.addEventListener("mousedown", function(event) {
-    const titlebar = event.target.closest(".window-titlebar");
-    if (!titlebar) return;
 
-    const windowElement = titlebar.closest(".os-window");
-    if (!windowElement) return;
+/* =========================================================
+   WINDOW DRAGGING
+========================================================= */
 
-    if (event.target.closest(".window-buttons")) return;
-    if (windowElement.dataset.maximized === "true") return;
+document.addEventListener(
+    "mousedown",
+    function(event) {
 
-    draggedWindow = windowElement;
-    bringToFront(windowElement.id);
+        const titlebar =
+            event.target.closest(
+                ".window-titlebar"
+            );
 
-    const rect = windowElement.getBoundingClientRect();
-    dragOffsetX = event.clientX - rect.left;
-    dragOffsetY = event.clientY - rect.top;
 
-    document.body.style.cursor = "move";
-    event.preventDefault();
-});
+        if (!titlebar) {
+            return;
+        }
 
-function getResizeDirection(event, windowElement) {
-    const rect = windowElement.getBoundingClientRect();
-    const edge = 8;
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+        const windowElement =
+            titlebar.closest(
+                ".os-window"
+            );
 
-    const left = x <= edge;
-    const right = x >= rect.width - edge;
-    const top = y <= edge;
-    const bottom = y >= rect.height - edge;
 
-    if (top && left) return "nw";
-    if (top && right) return "ne";
-    if (bottom && left) return "sw";
-    if (bottom && right) return "se";
-    if (left) return "w";
-    if (right) return "e";
-    if (top) return "n";
-    if (bottom) return "s";
+        if (!windowElement) {
+            return;
+        }
+
+
+        if (
+            event.target.closest(
+                ".window-buttons"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        draggedWindow =
+            windowElement;
+
+
+        bringToFront(
+            windowElement.id
+        );
+
+
+        const rect =
+            windowElement.getBoundingClientRect();
+
+
+        dragOffsetX =
+            event.clientX -
+            rect.left;
+
+
+        dragOffsetY =
+            event.clientY -
+            rect.top;
+
+
+        document.body.style.cursor =
+            "move";
+
+
+        event.preventDefault();
+
+    }
+);
+
+
+/* =========================================================
+   RESIZE DIRECTION
+========================================================= */
+
+function getResizeDirection(
+    event,
+    windowElement
+) {
+
+    const rect =
+        windowElement.getBoundingClientRect();
+
+
+    const edge =
+        8;
+
+
+    const x =
+        event.clientX -
+        rect.left;
+
+
+    const y =
+        event.clientY -
+        rect.top;
+
+
+    const left =
+        x <= edge;
+
+
+    const right =
+        x >= rect.width - edge;
+
+
+    const top =
+        y <= edge;
+
+
+    const bottom =
+        y >= rect.height - edge;
+
+
+    if (
+        top &&
+        left
+    ) {
+        return "nw";
+    }
+
+
+    if (
+        top &&
+        right
+    ) {
+        return "ne";
+    }
+
+
+    if (
+        bottom &&
+        left
+    ) {
+        return "sw";
+    }
+
+
+    if (
+        bottom &&
+        right
+    ) {
+        return "se";
+    }
+
+
+    if (left) {
+        return "w";
+    }
+
+
+    if (right) {
+        return "e";
+    }
+
+
+    if (top) {
+        return "n";
+    }
+
+
+    if (bottom) {
+        return "s";
+    }
+
 
     return "";
+
 }
 
-function getResizeCursor(direction) {
-    if (direction === "nw" || direction === "se") return "nwse-resize";
-    if (direction === "ne" || direction === "sw") return "nesw-resize";
-    if (direction === "n" || direction === "s") return "ns-resize";
-    if (direction === "e" || direction === "w") return "ew-resize";
+
+/* =========================================================
+   RESIZE CURSOR
+========================================================= */
+
+function getResizeCursor(
+    direction
+) {
+
+    if (
+        direction === "nw" ||
+        direction === "se"
+    ) {
+
+        return "nwse-resize";
+
+    }
+
+
+    if (
+        direction === "ne" ||
+        direction === "sw"
+    ) {
+
+        return "nesw-resize";
+
+    }
+
+
+    if (
+        direction === "n" ||
+        direction === "s"
+    ) {
+
+        return "ns-resize";
+
+    }
+
+
+    if (
+        direction === "e" ||
+        direction === "w"
+    ) {
+
+        return "ew-resize";
+
+    }
+
+
     return "default";
+
 }
 
-document.addEventListener("mousedown", function(event) {
-    if (event.target.closest(".window-titlebar")) return;
 
-    const windowElement = event.target.closest(".os-window");
-    if (!windowElement) return;
-    if (windowElement.dataset.maximized === "true") return;
+/* =========================================================
+   START RESIZE
+========================================================= */
 
-    const direction = getResizeDirection(event, windowElement);
-    if (!direction) return;
+document.addEventListener(
+    "mousedown",
+    function(event) {
 
-    resizedWindow = windowElement;
-    resizeDirection = direction;
-    bringToFront(windowElement.id);
+        if (
+            event.target.closest(
+                ".window-titlebar"
+            )
+        ) {
 
-    const rect = windowElement.getBoundingClientRect();
+            return;
 
-    resizeStartX = event.clientX;
-    resizeStartY = event.clientY;
-    resizeStartWidth = rect.width;
-    resizeStartHeight = rect.height;
-    resizeStartLeft = windowElement.offsetLeft;
-    resizeStartTop = windowElement.offsetTop;
+        }
 
-    document.body.style.cursor = getResizeCursor(direction);
-    event.preventDefault();
-});
 
-document.addEventListener("mousemove", function(event) {
-    if (draggedWindow) {
-        const desktop = document.getElementById("desktop");
-        const desktopRect = desktop.getBoundingClientRect();
+        const windowElement =
+            event.target.closest(
+                ".os-window"
+            );
 
-        let left = event.clientX - desktopRect.left - dragOffsetX;
-        let top = event.clientY - desktopRect.top - dragOffsetY;
 
-        const maxLeft = desktopRect.width - draggedWindow.offsetWidth;
-        const maxTop = desktopRect.height - 32 - draggedWindow.offsetHeight;
+        if (!windowElement) {
+            return;
+        }
 
-        left = Math.max(0, Math.min(left, maxLeft));
-        top = Math.max(0, Math.min(top, maxTop));
 
-        draggedWindow.style.left = left + "px";
-        draggedWindow.style.top = top + "px";
-        return;
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        const direction =
+            getResizeDirection(
+                event,
+                windowElement
+            );
+
+
+        if (!direction) {
+            return;
+        }
+
+
+        resizedWindow =
+            windowElement;
+
+
+        resizeDirection =
+            direction;
+
+
+        bringToFront(
+            windowElement.id
+        );
+
+
+        const rect =
+            windowElement.getBoundingClientRect();
+
+
+        resizeStartX =
+            event.clientX;
+
+
+        resizeStartY =
+            event.clientY;
+
+
+        resizeStartWidth =
+            rect.width;
+
+
+        resizeStartHeight =
+            rect.height;
+
+
+        resizeStartLeft =
+            windowElement.offsetLeft;
+
+
+        resizeStartTop =
+            windowElement.offsetTop;
+
+
+        document.body.style.cursor =
+            getResizeCursor(
+                direction
+            );
+
+
+        event.preventDefault();
+
     }
+);
 
-    if (resizedWindow) {
-        resizeWindow(event);
-        return;
+
+/* =========================================================
+   MOUSE MOVEMENT
+========================================================= */
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+
+        /*
+            DRAG
+        */
+
+        if (draggedWindow) {
+
+            const desktop =
+                document.getElementById(
+                    "desktop"
+                );
+
+
+            const desktopRect =
+                desktop.getBoundingClientRect();
+
+
+            let left =
+                event.clientX -
+                desktopRect.left -
+                dragOffsetX;
+
+
+            let top =
+                event.clientY -
+                desktopRect.top -
+                dragOffsetY;
+
+
+            const maxLeft =
+                desktopRect.width -
+                draggedWindow.offsetWidth;
+
+
+            const maxTop =
+                desktopRect.height -
+                32 -
+                draggedWindow.offsetHeight;
+
+
+            left =
+                Math.max(
+                    0,
+                    Math.min(
+                        left,
+                        maxLeft
+                    )
+                );
+
+
+            top =
+                Math.max(
+                    0,
+                    Math.min(
+                        top,
+                        maxTop
+                    )
+                );
+
+
+            draggedWindow.style.left =
+                left + "px";
+
+
+            draggedWindow.style.top =
+                top + "px";
+
+
+            return;
+
+        }
+
+
+        /*
+            RESIZE
+        */
+
+        if (resizedWindow) {
+
+            resizeWindow(
+                event
+            );
+
+            return;
+
+        }
+
+
+        /*
+            CURSOR PREVIEW
+        */
+
+        const windowElement =
+            event.target.closest(
+                ".os-window"
+            );
+
+
+        if (!windowElement) {
+
+            document.body.style.cursor =
+                "default";
+
+            return;
+
+        }
+
+
+        if (
+            windowElement.dataset.maximized ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        const direction =
+            getResizeDirection(
+                event,
+                windowElement
+            );
+
+
+        if (direction) {
+
+            document.body.style.cursor =
+                getResizeCursor(
+                    direction
+                );
+
+        }
+
+        else {
+
+            document.body.style.cursor =
+                "default";
+
+        }
+
     }
+);
 
-    const windowElement = event.target.closest(".os-window");
-    if (!windowElement) {
-        document.body.style.cursor = "default";
-        return;
-    }
 
-    if (windowElement.dataset.maximized === "true") return;
-
-    const direction = getResizeDirection(event, windowElement);
-    document.body.style.cursor = direction ? getResizeCursor(direction) : "default";
-});
+/* =========================================================
+   RESIZE WINDOW
+========================================================= */
 
 function resizeWindow(event) {
-    const dx = event.clientX - resizeStartX;
-    const dy = event.clientY - resizeStartY;
 
-    const minWidth = 300;
-    const minHeight = 200;
+    const dx =
+        event.clientX -
+        resizeStartX;
 
-    let width = resizeStartWidth;
-    let height = resizeStartHeight;
-    let left = resizeStartLeft;
-    let top = resizeStartTop;
 
-    if (resizeDirection.includes("e")) width = resizeStartWidth + dx;
-    if (resizeDirection.includes("w")) {
-        width = resizeStartWidth - dx;
-        left = resizeStartLeft + dx;
+    const dy =
+        event.clientY -
+        resizeStartY;
+
+
+    const minWidth =
+        300;
+
+
+    const minHeight =
+        200;
+
+
+    let width =
+        resizeStartWidth;
+
+
+    let height =
+        resizeStartHeight;
+
+
+    let left =
+        resizeStartLeft;
+
+
+    let top =
+        resizeStartTop;
+
+
+    if (
+        resizeDirection.includes("e")
+    ) {
+
+        width =
+            resizeStartWidth +
+            dx;
+
     }
-    if (resizeDirection.includes("s")) height = resizeStartHeight + dy;
-    if (resizeDirection.includes("n")) {
-        height = resizeStartHeight - dy;
-        top = resizeStartTop + dy;
+
+
+    if (
+        resizeDirection.includes("w")
+    ) {
+
+        width =
+            resizeStartWidth -
+            dx;
+
+        left =
+            resizeStartLeft +
+            dx;
+
     }
+
+
+    if (
+        resizeDirection.includes("s")
+    ) {
+
+        height =
+            resizeStartHeight +
+            dy;
+
+    }
+
+
+    if (
+        resizeDirection.includes("n")
+    ) {
+
+        height =
+            resizeStartHeight -
+            dy;
+
+        top =
+            resizeStartTop +
+            dy;
+
+    }
+
 
     if (width < minWidth) {
-        if (resizeDirection.includes("w")) {
-            left = resizeStartLeft + resizeStartWidth - minWidth;
+
+        if (
+            resizeDirection.includes("w")
+        ) {
+
+            left =
+                resizeStartLeft +
+                resizeStartWidth -
+                minWidth;
+
         }
-        width = minWidth;
+
+
+        width =
+            minWidth;
+
     }
+
 
     if (height < minHeight) {
-        if (resizeDirection.includes("n")) {
-            top = resizeStartTop + resizeStartHeight - minHeight;
+
+        if (
+            resizeDirection.includes("n")
+        ) {
+
+            top =
+                resizeStartTop +
+                resizeStartHeight -
+                minHeight;
+
         }
-        height = minHeight;
+
+
+        height =
+            minHeight;
+
     }
 
-    resizedWindow.style.width = width + "px";
-    resizedWindow.style.height = height + "px";
-    resizedWindow.style.left = left + "px";
-    resizedWindow.style.top = top + "px";
+
+    resizedWindow.style.width =
+        width + "px";
+
+
+    resizedWindow.style.height =
+        height + "px";
+
+
+    resizedWindow.style.left =
+        left + "px";
+
+
+    resizedWindow.style.top =
+        top + "px";
+
 }
 
-document.addEventListener("mouseup", function() {
-    draggedWindow = null;
-    resizedWindow = null;
-    resizeDirection = "";
-    document.body.style.cursor = "default";
-});
 
-document.addEventListener("mousedown", function(event) {
-    const windowElement = event.target.closest(".os-window");
-    if (!windowElement) return;
-    bringToFront(windowElement.id);
-});
+/* =========================================================
+   STOP DRAG / RESIZE
+========================================================= */
+
+document.addEventListener(
+    "mouseup",
+    function() {
+
+        draggedWindow =
+            null;
+
+
+        resizedWindow =
+            null;
+
+
+        resizeDirection =
+            "";
+
+
+        document.body.style.cursor =
+            "default";
+
+    }
+);
+
+
+/* =========================================================
+   BRING WINDOWS FORWARD
+========================================================= */
+
+document.addEventListener(
+    "mousedown",
+    function(event) {
+
+        const windowElement =
+            event.target.closest(
+                ".os-window"
+            );
+
+
+        if (!windowElement) {
+            return;
+        }
+
+
+        bringToFront(
+            windowElement.id
+        );
+
+    }
+);
+
+
+/* =========================================================
+   TASKBAR
+========================================================= */
 
 function updateTaskbar() {
-    const taskbar = document.getElementById("taskbar-programs");
-    if (!taskbar) return;
+
+    const taskbar =
+        document.getElementById(
+            "taskbar-programs"
+        );
+
+
+    if (!taskbar) {
+        return;
+    }
+
 
     taskbar.innerHTML = "";
 
-    Object.keys(openWindows).forEach(function(windowId) {
-        const windowElement = document.getElementById(windowId);
-        if (!windowElement) return;
 
-        const title = windowElement.querySelector(".window-titlebar span");
-        const button = document.createElement("button");
+    Object.keys(
+        openWindows
+    ).forEach(
+        function(windowId) {
 
-        button.className = "taskbar-button";
-        button.textContent = title ? title.textContent.trim() : "Application";
+            const windowElement =
+                document.getElementById(
+                    windowId
+                );
 
-        button.addEventListener("click", function() {
-            if (windowElement.style.display === "none") {
-                windowElement.style.display = "block";
-                bringToFront(windowId);
+
+            if (!windowElement) {
                 return;
             }
 
-            if (parseInt(windowElement.style.zIndex) === highestZ) {
-                minimizeWindow(windowId);
-            } else {
-                bringToFront(windowId);
-            }
-        });
 
-        taskbar.appendChild(button);
-    });
+            const title =
+                windowElement.querySelector(
+                    ".window-titlebar span"
+                );
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "taskbar-button";
+
+
+            button.textContent =
+                title
+                    ? title.textContent.trim()
+                    : "Application";
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    if (
+                        windowElement.style.display ===
+                        "none"
+                    ) {
+
+                        windowElement.style.display =
+                            "block";
+
+                        bringToFront(
+                            windowId
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (
+                        parseInt(
+                            windowElement.style.zIndex
+                        ) === highestZ
+                    ) {
+
+                        minimizeWindow(
+                            windowId
+                        );
+
+                    }
+
+                    else {
+
+                        bringToFront(
+                            windowId
+                        );
+
+                    }
+
+                }
+            );
+
+
+            taskbar.appendChild(
+                button
+            );
+
+        }
+    );
+
 }
+
+
+/* =========================================================
+   START MENU
+========================================================= */
 
 function toggleStartMenu() {
-    const menu = document.getElementById("start-menu");
-    if (!menu) return;
-    menu.classList.toggle("hidden");
+
+    const menu =
+        document.getElementById(
+            "start-menu"
+        );
+
+
+    if (!menu) {
+        return;
+    }
+
+
+    menu.classList.toggle(
+        "hidden"
+    );
+
 }
 
-document.addEventListener("click", function(event) {
-    const menu = document.getElementById("start-menu");
-    const startButton = document.getElementById("start-button");
 
-    if (!menu || !startButton) return;
+/* =========================================================
+   CLOSE START MENU
+========================================================= */
 
-    if (!menu.contains(event.target) && !startButton.contains(event.target)) {
-        menu.classList.add("hidden");
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const menu =
+            document.getElementById(
+                "start-menu"
+            );
+
+
+        const startButton =
+            document.getElementById(
+                "start-button"
+            );
+
+
+        if (
+            !menu ||
+            !startButton
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !menu.contains(
+                event.target
+            ) &&
+            !startButton.contains(
+                event.target
+            )
+        ) {
+
+            menu.classList.add(
+                "hidden"
+            );
+
+        }
+
     }
-});
+);
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
 
 function updateClock() {
-    const clock = document.getElementById("clock");
-    if (!clock) return;
 
-    const now = new Date();
-    let hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    const suffix = hours >= 12 ? "PM" : "AM";
+    const clock =
+        document.getElementById(
+            "clock"
+        );
 
-    hours = hours % 12;
-    hours = hours || 12;
 
-    clock.textContent = hours + ":" + minutes + " " + suffix;
+    if (!clock) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    let hours =
+        now.getHours();
+
+
+    const minutes =
+        now.getMinutes()
+            .toString()
+            .padStart(
+                2,
+                "0"
+            );
+
+
+    const suffix =
+        hours >= 12
+            ? "PM"
+            : "AM";
+
+
+    hours =
+        hours % 12;
+
+
+    hours =
+        hours || 12;
+
+
+    clock.textContent =
+        hours +
+        ":" +
+        minutes +
+        " " +
+        suffix;
+
 }
 
+
 updateClock();
-setInterval(updateClock, 1000);
 
-document.addEventListener("DOMContentLoaded", function() {
-    const oldDocumentsWindow = document.getElementById("documentsWindow");
 
-    if (oldDocumentsWindow) {
-        oldDocumentsWindow.style.display = "none";
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        /*
+            The old hard-coded documentsWindow
+            is deliberately hidden from the
+            new filesystem system.
+
+            This prevents the old and new
+            explorers from fighting each other.
+        */
+
+        const oldDocumentsWindow =
+            document.getElementById(
+                "documentsWindow"
+            );
+
+
+        if (oldDocumentsWindow) {
+
+            oldDocumentsWindow.style.display =
+                "none";
+
+        }
+
     }
-});
+);
