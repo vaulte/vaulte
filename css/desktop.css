@@ -252,7 +252,7 @@ body {
 /* Folder navigation / directory bar */
 
 .explorer-toolbar {
-    height: 50px;
+    height: 34px;
     min-height: 34px;
 
     display: flex;
