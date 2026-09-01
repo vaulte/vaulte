@@ -1198,3 +1198,18 @@ body {
     color: #111111;
 }
 
+
+.file-item.selected {
+    background: #316ac5;
+    border: 1px dotted #ffffff;
+    color: white;
+}
+
+.file-item.selected .file-name {
+    color: white;
+}
+
+.file-item {
+    user-select: none;
+    cursor: pointer;
+}
